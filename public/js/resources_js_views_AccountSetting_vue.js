@@ -41,18 +41,23 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   },
   computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo"])),
   mounted: function mounted() {
-    if (localStorage.getItem('default_image') != '') {
-      this.default_image = localStorage.getItem('default_image');
-    }
+    this.fetchImage();
     this.profileOverview();
   },
   methods: {
+    fetchImage: function fetchImage() {
+      if (localStorage.getItem("default_image") != "") {
+        this.default_image = localStorage.getItem("default_image");
+      } else if (this.getLoginInfo.user.user_image != 0) {
+        this.default_image = this.$root.getMedia(this.getLoginInfo.user.user_image);
+      } else {}
+    },
     handleProfileImage: function handleProfileImage() {
       var _this = this;
       this.image_file = document.querySelector("input[id=profile-picture]").files[0];
       var callBack = function callBack(imgUrl) {
         _this.default_image = imgUrl;
-        localStorage.setItem('default_image', imgUrl);
+        localStorage.setItem("default_image", imgUrl);
         _this.addImage();
       };
       var reader = new FileReader();
@@ -214,7 +219,7 @@ var render = function render() {
     staticClass: "rounded-circle",
     attrs: {
       alt: "Profile",
-      src: _vm.getLoginInfo.user.user_image == 0 ? _vm.default_image : _vm.$root.getMedia(_vm.getLoginInfo.user.user_image)
+      src: _vm.default_image
     },
     on: {
       click: _vm.handleImageUpload

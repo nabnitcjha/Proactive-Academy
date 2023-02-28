@@ -25,13 +25,7 @@
                             <img
                                 alt="Profile"
                                 class="rounded-circle"
-                                :src="
-                                    getLoginInfo.user.user_image == 0
-                                        ? default_image
-                                        : $root.getMedia(
-                                              getLoginInfo.user.user_image
-                                          )
-                                "
+                                :src="default_image"
                                 @click="handleImageUpload"
                             />
 
@@ -163,13 +157,20 @@ export default {
         ...mapState(loginInfoStore, ["getLoginInfo"]),
     },
     mounted() {
-        if (localStorage.getItem('default_image')!='') {
-            this.default_image = localStorage.getItem('default_image');
-        }
+        this.fetchImage();
         this.profileOverview();
     },
     methods: {
-       
+        fetchImage() {
+            if (localStorage.getItem("default_image") != "") {
+                this.default_image = localStorage.getItem("default_image");
+            } else if (this.getLoginInfo.user.user_image != 0) {
+                this.default_image = this.$root.getMedia(
+                    this.getLoginInfo.user.user_image
+                );
+            } else {
+            }
+        },
         handleProfileImage() {
             this.image_file = document.querySelector(
                 "input[id=profile-picture]"
@@ -177,7 +178,7 @@ export default {
 
             const callBack = (imgUrl) => {
                 this.default_image = imgUrl;
-                localStorage.setItem('default_image', imgUrl);
+                localStorage.setItem("default_image", imgUrl);
                 this.addImage();
             };
 
