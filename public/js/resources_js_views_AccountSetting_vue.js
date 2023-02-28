@@ -66,12 +66,12 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
     addImage: function addImage() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var form, urlText, postResponse;
+        var formData, urlText, postResponse;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              form = new FormData();
-              form.append("user_image", _this2.image_file);
+              formData = new FormData();
+              formData.append("user_image", _this2.image_file);
               // formData.append("image_info[user_image]", this.image_file);
               urlText = "user/" + _this2.getLoginInfo.user.id + "/userImage";
               _context.next = 5;
@@ -88,7 +88,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
     changePassword: function changePassword(e) {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var id, _formData, urlText, putResponse;
+        var id, formData, urlText, putResponse;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
@@ -110,11 +110,11 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
               break;
             case 9:
               id = _this3.getLoginInfo.user.id;
-              _formData = {};
-              _formData["password"] = _this3.new_password;
+              formData = {};
+              formData["password"] = _this3.new_password;
               urlText = "user/" + id + "/changePassword";
               _context2.next = 15;
-              return _this3.put(urlText, _formData);
+              return _this3.put(urlText, formData);
             case 15:
               putResponse = _context2.sent;
               _this3.saveAlert("password change succesfully");

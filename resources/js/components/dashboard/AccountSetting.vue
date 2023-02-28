@@ -149,7 +149,7 @@ import $ from "jquery";
 import { loginInfoStore } from "../../stores/loginInfo";
 import { mapState } from "pinia";
 // import {profileImg} from "../../../../public/dashboard_css/assets/img/profile-img.jpg";
-import { profileImg,Student } from "../../assets/dashboard/index";
+import { profileImg, Student } from "../../assets/dashboard/index";
 export default {
     data() {
         return {
@@ -193,12 +193,12 @@ export default {
         handleImageUpload() {
             $("#image-upload").click();
         },
-       async addImage() {
-            var form = new FormData();
-            form.append("user_image", this.image_file);
+        async addImage() {
+            var formData = new FormData();
+            formData.append("user_image", this.image_file);
             // formData.append("image_info[user_image]", this.image_file);
-            let urlText =
-                "user/" + this.getLoginInfo.user.id + "/userImage";
+            let urlText = "user/" + this.getLoginInfo.user.id + "/userImage";
+
             let postResponse = await this.post(urlText, formData);
         },
         async changePassword(e) {
