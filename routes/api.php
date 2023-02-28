@@ -41,10 +41,6 @@ Route::group([
     Route::get('student/{id}/sortedClass', 'StudentController@sortedClass');
     Route::get('admin/sortedClass', 'StudentController@adminSortedClass');
     Route::get('student/{id}/class', 'StudentController@allClasses');
-    Route::put('student/{id}/changePassword', 'StudentController@changePassword');
-
-    // change password 
-    Route::put('user/{id}/changePassword', 'StudentController@changePassword');
 
     // student login route
     Route::get('student/{id}/teacher', 'StudentController@getTeacher');
@@ -130,4 +126,6 @@ Route::group([
 ], function ($router) {
     Route::post('user/{id}/userImage', [App\Http\Controllers\UserController::class, 'userImage']);
     Route::get('user/{id}', [App\Http\Controllers\UserController::class, 'userInfo']);
+    Route::post('user/{id}/changePassword', [App\Http\Controllers\UserController::class, 'changePassword']);
+
 });

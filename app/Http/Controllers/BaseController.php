@@ -39,10 +39,10 @@ class BaseController extends Controller
 
         $Model = $this->getModel();
         foreach ($params as $key => $value) {
-            if ($key==='password') {
+            if ($key === 'password') {
                 $Model->$key = bcrypt($value);
-            }else{
-            $Model->$key = $value;
+            } else {
+                $Model->$key = $value;
             }
         }
         if (!$Model->save()) {
@@ -73,7 +73,11 @@ class BaseController extends Controller
             return $this->getError("Can not find {$id}");
         }
         foreach ($params as $key => $value) {
-            $Model->$key = $value;
+            if ($key === 'password') {
+                $Model->$key = bcrypt($value);
+            } else {
+                $Model->$key = $value;
+            }
         }
         if (!$Model->save()) {
             return $this->getError("Faild update {$id}");

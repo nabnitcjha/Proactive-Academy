@@ -122,11 +122,11 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
               break;
             case 9:
               id = _this3.getLoginInfo.user.id;
-              formData = {};
-              formData["password"] = _this3.new_password;
+              formData = new FormData();
+              formData.append("password_info[password]", _this3.new_password);
               urlText = "user/" + id + "/changePassword";
               _context2.next = 15;
-              return _this3.put(urlText, formData);
+              return _this3.post(urlText, formData);
             case 15:
               putResponse = _context2.sent;
               _this3.saveAlert("password change succesfully");
@@ -218,7 +218,7 @@ var render = function render() {
       change: _vm.handleProfileImage
     }
   }), _vm._v(" "), _c("img", {
-    staticClass: "rounded-circle",
+    staticClass: "rounded-circle hand",
     attrs: {
       alt: "Profile",
       src: _vm.fetchImage

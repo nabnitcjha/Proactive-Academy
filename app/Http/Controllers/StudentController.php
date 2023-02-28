@@ -239,14 +239,6 @@ class StudentController extends BaseController
         
         return  AdminDashboardResource::make($admin_dashboard_info);
     }
-
-    public function changePassword(Request $request, $id)
-    {
-        $user = User::find($id);
-        $user->password = bcrypt($request->password);
-        $user->save();
-        return $this->successMessage('password change successfully');
-    }
 }
 
 

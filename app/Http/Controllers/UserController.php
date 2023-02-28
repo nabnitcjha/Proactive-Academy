@@ -35,4 +35,11 @@ class UserController extends BaseController
 
         return UserResource::make($user);
     }
+
+    public function changePassword(Request $request, $id)
+    {
+        parent::createModelObject("App\Models\User");
+        $this->update($request->password_info, $id);
+        return $this->successMessage('password change successfully');
+    }
 }

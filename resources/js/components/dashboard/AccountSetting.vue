@@ -24,7 +24,7 @@
                             />
                             <img
                                 alt="Profile"
-                                class="rounded-circle"
+                                class="rounded-circle hand"
                                 :src="fetchImage"
                                 @click="handleImageUpload"
                             />
@@ -216,11 +216,11 @@ export default {
                 this.errorAlert("password not match");
             } else {
                 let id = this.getLoginInfo.user.id;
-                let formData = {};
-                formData["password"] = this.new_password;
+                let formData = new FormData();
+                formData.append("password_info[password]", this.new_password);
                 let urlText = "user/" + id + "/changePassword";
 
-                let putResponse = await this.put(urlText, formData);
+                let putResponse = await this.post(urlText, formData);
                 this.saveAlert("password change succesfully");
 
                 // this.logOut();
