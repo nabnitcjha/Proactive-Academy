@@ -1,0 +1,8 @@
+.modal-tall .modal-dialog {
+  margin-right: 0!important;
+}
+ 
+.modal-tall.fade:not(.in)  .modal-tall .modal-dialog {
+  -webkit-transform: translate3d(-25%, 0, 0);
+  transform: translate3d(-25%, 0, 0);
+}
