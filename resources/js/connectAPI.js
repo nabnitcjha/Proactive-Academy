@@ -57,6 +57,7 @@ export default {
 
             let url = "/api/auth/logout";
             axios.post(url).then(() => {
+                localStorage.setItem("default_image", "");
                 this.setAuthenticate(false);
             });
         },

@@ -41,6 +41,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   },
   computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo"])),
   mounted: function mounted() {
+    if (localStorage.getItem('default_image') != '') {
+      this.default_image = localStorage.getItem('default_image');
+    }
     this.profileOverview();
   },
   methods: {
@@ -49,6 +52,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       this.image_file = document.querySelector("input[id=profile-picture]").files[0];
       var callBack = function callBack(imgUrl) {
         _this.default_image = imgUrl;
+        localStorage.setItem('default_image', imgUrl);
         _this.addImage();
       };
       var reader = new FileReader();
@@ -78,7 +82,8 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
               return _this2.post(urlText, formData);
             case 5:
               postResponse = _context.sent;
-            case 6:
+              _this2.userImage();
+            case 7:
             case "end":
               return _context.stop();
           }

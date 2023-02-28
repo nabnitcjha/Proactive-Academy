@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Admin\UserResource;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
@@ -28,8 +29,10 @@ class UserController extends BaseController
     }
 
     public function userInfo($id){
+
         parent::createModelObject("App\Models\User");
         $user = $this->fetch($id);
-        $this->successResponse($user, 'fetch successfully');
+
+        return UserResource::make($user);
     }
 }

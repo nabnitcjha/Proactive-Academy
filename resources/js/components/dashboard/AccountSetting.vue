@@ -163,9 +163,13 @@ export default {
         ...mapState(loginInfoStore, ["getLoginInfo"]),
     },
     mounted() {
+        if (localStorage.getItem('default_image')!='') {
+            this.default_image = localStorage.getItem('default_image');
+        }
         this.profileOverview();
     },
     methods: {
+       
         handleProfileImage() {
             this.image_file = document.querySelector(
                 "input[id=profile-picture]"
@@ -173,6 +177,7 @@ export default {
 
             const callBack = (imgUrl) => {
                 this.default_image = imgUrl;
+                localStorage.setItem('default_image', imgUrl);
                 this.addImage();
             };
 
@@ -200,6 +205,7 @@ export default {
             let urlText = "user/" + this.getLoginInfo.user.id + "/userImage";
 
             let postResponse = await this.post(urlText, formData);
+            this.userImage();
         },
         async changePassword(e) {
             e.preventDefault();
