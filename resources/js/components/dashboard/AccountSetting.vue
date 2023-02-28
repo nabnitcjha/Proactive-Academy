@@ -149,7 +149,7 @@ import $ from "jquery";
 import { loginInfoStore } from "../../stores/loginInfo";
 import { mapState } from "pinia";
 // import {profileImg} from "../../../../public/dashboard_css/assets/img/profile-img.jpg";
-import { profileImg } from "../../assets/dashboard/index";
+import { profileImg,Student } from "../../assets/dashboard/index";
 export default {
     data() {
         return {
