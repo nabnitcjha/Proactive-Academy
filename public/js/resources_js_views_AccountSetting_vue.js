@@ -369,7 +369,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "LogoProactive": () => (/* reexport default from dynamic */ _logoproactive_svg__WEBPACK_IMPORTED_MODULE_0___default.a),
 /* harmony export */   "Parents": () => (/* reexport default from dynamic */ _parent_svg__WEBPACK_IMPORTED_MODULE_3___default.a),
 /* harmony export */   "Student": () => (/* reexport default from dynamic */ _student_svg__WEBPACK_IMPORTED_MODULE_1___default.a),
-/* harmony export */   "Teacher": () => (/* reexport default from dynamic */ _teacher_svg__WEBPACK_IMPORTED_MODULE_2___default.a)
+/* harmony export */   "Teacher": () => (/* reexport default from dynamic */ _teacher_svg__WEBPACK_IMPORTED_MODULE_2___default.a),
+/* harmony export */   "profileImg": () => (/* reexport default from dynamic */ _profileImg_jpg__WEBPACK_IMPORTED_MODULE_4___default.a)
 /* harmony export */ });
 /* harmony import */ var _logoproactive_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logoproactive.svg */ "./resources/js/assets/dashboard/logoproactive.svg");
 /* harmony import */ var _logoproactive_svg__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_logoproactive_svg__WEBPACK_IMPORTED_MODULE_0__);
@@ -379,6 +380,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _teacher_svg__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_teacher_svg__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _parent_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./parent.svg */ "./resources/js/assets/dashboard/parent.svg");
 /* harmony import */ var _parent_svg__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_parent_svg__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _profileImg_jpg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./profileImg.jpg */ "./resources/js/assets/dashboard/profileImg.jpg");
+/* harmony import */ var _profileImg_jpg__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_profileImg_jpg__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -404,6 +408,16 @@ module.exports = "/images/logoproactive.svg?85721c91d1e051389ff1540a6b1b30fc";
 /***/ ((module) => {
 
 module.exports = "/images/parent.svg?baa94e1ebbe0e2320b848a2f23c283e6";
+
+/***/ }),
+
+/***/ "./resources/js/assets/dashboard/profileImg.jpg":
+/*!******************************************************!*\
+  !*** ./resources/js/assets/dashboard/profileImg.jpg ***!
+  \******************************************************/
+/***/ ((module) => {
+
+module.exports = "/images/profileImg.jpg?08daa19250f9a7f7cca79c294dfa09b8";
 
 /***/ }),
 
