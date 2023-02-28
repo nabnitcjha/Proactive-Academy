@@ -39,25 +39,27 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       image_file: ""
     };
   },
-  computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo"])),
+  computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo", "getDefaultImage"])),
   mounted: function mounted() {
     this.fetchImage();
     this.profileOverview();
   },
-  methods: {
+  methods: _objectSpread(_objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapActions)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["setDefaultImage"])), {}, {
     fetchImage: function fetchImage() {
-      if (localStorage.getItem("default_image") != "") {
-        this.default_image = localStorage.getItem("default_image");
-      } else if (this.getLoginInfo.user.user_image != 0) {
-        this.default_image = this.$root.getMedia(this.getLoginInfo.user.user_image);
-      } else {}
+      if (this.getDefaultImage != "") {
+        this.default_image = this.getDefaultImage;
+      } else {
+        if (this.getLoginInfo.user.user_image != 0) {
+          this.default_image = this.$root.getMedia(this.getLoginInfo.user.user_image);
+        }
+      }
     },
     handleProfileImage: function handleProfileImage() {
       var _this = this;
       this.image_file = document.querySelector("input[id=profile-picture]").files[0];
       var callBack = function callBack(imgUrl) {
         _this.default_image = imgUrl;
-        localStorage.setItem("default_image", imgUrl);
+        _this.setDefaultImage(imgUrl);
         _this.addImage();
       };
       var reader = new FileReader();
@@ -137,7 +139,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         }, _callee2);
       }))();
     }
-  }
+  })
 });
 
 /***/ }),
@@ -364,90 +366,6 @@ var render = function render() {
 var staticRenderFns = [];
 render._withStripped = true;
 
-
-/***/ }),
-
-/***/ "./resources/js/assets/dashboard/index.js":
-/*!************************************************!*\
-  !*** ./resources/js/assets/dashboard/index.js ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LogoProactive": () => (/* reexport default from dynamic */ _logoproactive_svg__WEBPACK_IMPORTED_MODULE_0___default.a),
-/* harmony export */   "Parents": () => (/* reexport default from dynamic */ _parent_svg__WEBPACK_IMPORTED_MODULE_3___default.a),
-/* harmony export */   "Student": () => (/* reexport default from dynamic */ _student_svg__WEBPACK_IMPORTED_MODULE_1___default.a),
-/* harmony export */   "Teacher": () => (/* reexport default from dynamic */ _teacher_svg__WEBPACK_IMPORTED_MODULE_2___default.a),
-/* harmony export */   "profileImg": () => (/* reexport default from dynamic */ _profileImg_jpg__WEBPACK_IMPORTED_MODULE_4___default.a)
-/* harmony export */ });
-/* harmony import */ var _logoproactive_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./logoproactive.svg */ "./resources/js/assets/dashboard/logoproactive.svg");
-/* harmony import */ var _logoproactive_svg__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_logoproactive_svg__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _student_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./student.svg */ "./resources/js/assets/dashboard/student.svg");
-/* harmony import */ var _student_svg__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_student_svg__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _teacher_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./teacher.svg */ "./resources/js/assets/dashboard/teacher.svg");
-/* harmony import */ var _teacher_svg__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_teacher_svg__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _parent_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./parent.svg */ "./resources/js/assets/dashboard/parent.svg");
-/* harmony import */ var _parent_svg__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_parent_svg__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _profileImg_jpg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./profileImg.jpg */ "./resources/js/assets/dashboard/profileImg.jpg");
-/* harmony import */ var _profileImg_jpg__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_profileImg_jpg__WEBPACK_IMPORTED_MODULE_4__);
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./resources/js/assets/dashboard/logoproactive.svg":
-/*!*********************************************************!*\
-  !*** ./resources/js/assets/dashboard/logoproactive.svg ***!
-  \*********************************************************/
-/***/ ((module) => {
-
-module.exports = "/images/logoproactive.svg?85721c91d1e051389ff1540a6b1b30fc";
-
-/***/ }),
-
-/***/ "./resources/js/assets/dashboard/parent.svg":
-/*!**************************************************!*\
-  !*** ./resources/js/assets/dashboard/parent.svg ***!
-  \**************************************************/
-/***/ ((module) => {
-
-module.exports = "/images/parent.svg?baa94e1ebbe0e2320b848a2f23c283e6";
-
-/***/ }),
-
-/***/ "./resources/js/assets/dashboard/profileImg.jpg":
-/*!******************************************************!*\
-  !*** ./resources/js/assets/dashboard/profileImg.jpg ***!
-  \******************************************************/
-/***/ ((module) => {
-
-module.exports = "/images/profileImg.jpg?08daa19250f9a7f7cca79c294dfa09b8";
-
-/***/ }),
-
-/***/ "./resources/js/assets/dashboard/student.svg":
-/*!***************************************************!*\
-  !*** ./resources/js/assets/dashboard/student.svg ***!
-  \***************************************************/
-/***/ ((module) => {
-
-module.exports = "/images/student.svg?4f86e358e5b42dd8f0a21cf87f315424";
-
-/***/ }),
-
-/***/ "./resources/js/assets/dashboard/teacher.svg":
-/*!***************************************************!*\
-  !*** ./resources/js/assets/dashboard/teacher.svg ***!
-  \***************************************************/
-/***/ ((module) => {
-
-module.exports = "/images/teacher.svg?c1f60da117822ee64bfc708f01683a3b";
 
 /***/ }),
 

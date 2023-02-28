@@ -141,7 +141,7 @@
 <script>
 import $ from "jquery";
 import { loginInfoStore } from "../../stores/loginInfo";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 // import {profileImg} from "../../../../public/dashboard_css/assets/img/profile-img.jpg";
 import { profileImg, Student } from "../../assets/dashboard/index";
 export default {
@@ -154,21 +154,23 @@ export default {
         };
     },
     computed: {
-        ...mapState(loginInfoStore, ["getLoginInfo"]),
+        ...mapState(loginInfoStore, ["getLoginInfo", "getDefaultImage"]),
     },
     mounted() {
         this.fetchImage();
         this.profileOverview();
     },
     methods: {
+        ...mapActions(loginInfoStore, ["setDefaultImage"]),
         fetchImage() {
-            if (localStorage.getItem("default_image") != "") {
-                this.default_image = localStorage.getItem("default_image");
-            } else if (this.getLoginInfo.user.user_image != 0) {
-                this.default_image = this.$root.getMedia(
-                    this.getLoginInfo.user.user_image
-                );
+            if (this.getDefaultImage != "") {
+                this.default_image = this.getDefaultImage;
             } else {
+                if (this.getLoginInfo.user.user_image != 0) {
+                    this.default_image = this.$root.getMedia(
+                        this.getLoginInfo.user.user_image
+                    );
+                }
             }
         },
         handleProfileImage() {
@@ -178,7 +180,7 @@ export default {
 
             const callBack = (imgUrl) => {
                 this.default_image = imgUrl;
-                localStorage.setItem("default_image", imgUrl);
+                this.setDefaultImage(imgUrl);
                 this.addImage();
             };
 

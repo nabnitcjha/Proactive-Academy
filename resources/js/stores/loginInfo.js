@@ -7,10 +7,14 @@ export const loginInfoStore = defineStore(
   state: () => {
     return { 
       loginInfo: {},
-      isAuthenticate:false 
+      isAuthenticate:false ,
+      default_image:''
     }
   },
   getters:{
+    getDefaultImage(){
+      return this.default_image;
+  },
     getLoginInfo(){
         return this.loginInfo;
     },
@@ -19,6 +23,9 @@ export const loginInfoStore = defineStore(
     }
   },
   actions: {
+    setDefaultImage(val) {
+      this.default_image=val;
+    },
     setLoginInfo(val) {
       this.loginInfo=val;
     },
