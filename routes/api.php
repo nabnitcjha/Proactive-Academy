@@ -129,4 +129,5 @@ Route::group([
 
 ], function ($router) {
     Route::post('user/{id}/userImage', [App\Http\Controllers\UserController::class, 'userImage']);
+    Route::get('user/{id}', [App\Http\Controllers\UserController::class, 'userInfo']);
 });

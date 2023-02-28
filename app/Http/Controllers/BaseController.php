@@ -52,7 +52,7 @@ class BaseController extends Controller
         return $Model;
     }
 
-    public function show($id)
+    public function fetch($id)
     {
         $Model = $this->getModel();
         $Obj = $Model::find($id);

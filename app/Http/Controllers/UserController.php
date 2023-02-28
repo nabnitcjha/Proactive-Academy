@@ -26,4 +26,10 @@ class UserController extends BaseController
             parent::update($user_info,$id);
         }
     }
+
+    public function userInfo($id){
+        parent::createModelObject("App\Models\User");
+        $user = $this->fetch($id);
+        $this->successResponse($user, 'fetch successfully');
+    }
 }
