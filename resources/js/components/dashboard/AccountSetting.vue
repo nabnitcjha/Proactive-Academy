@@ -7,11 +7,34 @@
                         <div
                             class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                         >
+                            <label
+                                for="profile-picture"
+                                class="custom-file-upload"
+                                id="image-upload"
+                            >
+                            </label>
+                            <input
+                                ref="imgfile"
+                                type="file"
+                                @change="handleProfileImage"
+                                name="user_image"
+                                accept="image/*"
+                                id="profile-picture"
+                                style="visibility: hidden"
+                            />
                             <img
-                                src="../../../../public/dashboard_css/assets/img/profile-img.jpg"
                                 alt="Profile"
                                 class="rounded-circle"
+                                :src="
+                                    getLoginInfo.user.user_image == 0
+                                        ? default_image
+                                        : $root.getMedia(
+                                              getLoginInfo.user.user_image
+                                          )
+                                "
+                                @click="handleImageUpload"
                             />
+
                             <h2>
                                 {{ getLoginInfo.user.name }}
                             </h2>
@@ -122,13 +145,18 @@
 </template>
 
 <script>
+import $ from "jquery";
 import { loginInfoStore } from "../../stores/loginInfo";
 import { mapState } from "pinia";
+// import {profileImg} from "../../../../public/dashboard_css/assets/img/profile-img.jpg";
+import { profileImg } from "../../assets/dashboard/index";
 export default {
     data() {
         return {
             confirm_password: "",
             new_password: "",
+            default_image: profileImg,
+            image_file: "",
         };
     },
     computed: {
@@ -138,21 +166,56 @@ export default {
         this.profileOverview();
     },
     methods: {
+        handleProfileImage() {
+            this.image_file = document.querySelector(
+                "input[id=profile-picture]"
+            ).files[0];
+
+            const callBack = (imgUrl) => {
+                this.default_image = imgUrl;
+                this.addImage();
+            };
+
+            const reader = new FileReader();
+            reader.addEventListener(
+                "load",
+                function () {
+                    // convert image file to base64 string
+                    // preview.src = reader.result;
+                    callBack(reader.result);
+
+                    document.getElementById("profile-picture").value = "";
+                },
+                false
+            );
+            reader.readAsDataURL(this.image_file);
+        },
+        handleImageUpload() {
+            $("#image-upload").click();
+        },
+       async addImage() {
+            var form = new FormData();
+            form.append("user_image", this.image_file);
+            // formData.append("image_info[user_image]", this.image_file);
+            let urlText =
+                "user/" + this.getLoginInfo.user.id + "/userImage";
+            let postResponse = await this.post(urlText, formData);
+        },
         async changePassword(e) {
             e.preventDefault();
 
-            if (this.new_password==''||this.confirm_password=='') {
+            if (this.new_password == "" || this.confirm_password == "") {
                 this.errorAlert("password is empty");
-            }else if (this.new_password != this.confirm_password) {
+            } else if (this.new_password != this.confirm_password) {
                 this.errorAlert("password not match");
             } else {
                 let id = this.getLoginInfo.user.id;
                 let formData = {};
-                formData['password'] = this.new_password;
-                let  urlText ="user/" + id + "/changePassword";
+                formData["password"] = this.new_password;
+                let urlText = "user/" + id + "/changePassword";
 
                 let putResponse = await this.put(urlText, formData);
-                this.saveAlert('password change succesfully');
+                this.saveAlert("password change succesfully");
 
                 // this.logOut();
             }

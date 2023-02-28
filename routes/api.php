@@ -120,3 +120,13 @@ Route::group([
     Route::get('groupMessages/{class_unique_id}/{my_id}', [App\Http\Controllers\MessageController::class, 'fetchGroupMessages']);
     Route::post('messages', [App\Http\Controllers\MessageController::class, 'sendMessage']);
 });
+
+// User routes
+Route::group([
+
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers'
+
+], function ($router) {
+    Route::post('user/{id}/userImage', [App\Http\Controllers\UserController::class, 'userImage']);
+});
