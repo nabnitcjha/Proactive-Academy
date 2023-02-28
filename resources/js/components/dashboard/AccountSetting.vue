@@ -25,7 +25,7 @@
                             <img
                                 alt="Profile"
                                 class="rounded-circle"
-                                :src="default_image"
+                                :src="fetchImage"
                                 @click="handleImageUpload"
                             />
 
@@ -155,24 +155,21 @@ export default {
     },
     computed: {
         ...mapState(loginInfoStore, ["getLoginInfo", "getDefaultImage"]),
+        fetchImage() {
+            if (this.getDefaultImage != "") {
+                return this.getDefaultImage;
+            } else if (this.getLoginInfo.user.user_image != 0) {
+                return this.$root.getMedia(this.getLoginInfo.user.user_image);
+            } else {
+                return this.default_image;
+            }
+        },
     },
     mounted() {
-        this.fetchImage();
         this.profileOverview();
     },
     methods: {
         ...mapActions(loginInfoStore, ["setDefaultImage"]),
-        fetchImage() {
-            if (this.getDefaultImage != "") {
-                this.default_image = this.getDefaultImage;
-            } else {
-                if (this.getLoginInfo.user.user_image != 0) {
-                    this.default_image = this.$root.getMedia(
-                        this.getLoginInfo.user.user_image
-                    );
-                }
-            }
-        },
         handleProfileImage() {
             this.image_file = document.querySelector(
                 "input[id=profile-picture]"

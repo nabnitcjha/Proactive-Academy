@@ -39,21 +39,21 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       image_file: ""
     };
   },
-  computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo", "getDefaultImage"])),
+  computed: _objectSpread(_objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo", "getDefaultImage"])), {}, {
+    fetchImage: function fetchImage() {
+      if (this.getDefaultImage != "") {
+        return this.getDefaultImage;
+      } else if (this.getLoginInfo.user.user_image != 0) {
+        return this.$root.getMedia(this.getLoginInfo.user.user_image);
+      } else {
+        return this.default_image;
+      }
+    }
+  }),
   mounted: function mounted() {
-    this.fetchImage();
     this.profileOverview();
   },
   methods: _objectSpread(_objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_3__.mapActions)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["setDefaultImage"])), {}, {
-    fetchImage: function fetchImage() {
-      if (this.getDefaultImage != "") {
-        this.default_image = this.getDefaultImage;
-      } else {
-        if (this.getLoginInfo.user.user_image != 0) {
-          this.default_image = this.$root.getMedia(this.getLoginInfo.user.user_image);
-        }
-      }
-    },
     handleProfileImage: function handleProfileImage() {
       var _this = this;
       this.image_file = document.querySelector("input[id=profile-picture]").files[0];
@@ -221,7 +221,7 @@ var render = function render() {
     staticClass: "rounded-circle",
     attrs: {
       alt: "Profile",
-      src: _vm.default_image
+      src: _vm.fetchImage
     },
     on: {
       click: _vm.handleImageUpload
