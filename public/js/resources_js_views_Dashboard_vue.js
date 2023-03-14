@@ -91,7 +91,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              urlText = "student/" + _this.getLoginInfo.student_info.id + "/sortedClass";
+              urlText = "parent/" + _this.getLoginInfo.parent_info.id + "/todayClass";
               _context.next = 3;
               return _this.get(urlText, 1, false);
             case 3:
@@ -150,7 +150,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              urlText = "student/" + _this.getLoginInfo.student_info.id + "/sortedClass";
+              urlText = "student/" + _this.getLoginInfo.student_info.id + "/todayClass";
               _context.next = 3;
               return _this.get(urlText, 1, false);
             case 3:
@@ -209,7 +209,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              urlText = "teacher/" + _this.getLoginInfo.teacher_info.id + "/sortedClass";
+              urlText = "teacher/" + _this.getLoginInfo.teacher_info.id + "/todayClass";
               _context.next = 3;
               return _this.get(urlText, 1, false);
             case 3:
@@ -429,59 +429,43 @@ var render = function render() {
     staticClass: "card"
   }, [_vm._m(2), _vm._v(" "), _c("div", {
     staticClass: "card-body"
-  }, [_vm._m(3), _vm._v(" "), _c("div", {
-    staticClass: "activity"
-  }, _vm._l(_vm.totalClass, function (tcls, index) {
-    return _c("div", {
-      key: index,
-      staticClass: "activity-item d-flex"
+  }, [_vm._m(3), _vm._v(" "), _vm._l(_vm.totalClass, function (trs, index) {
+    return _c("fragment", {
+      key: index
     }, [_c("div", {
-      staticClass: "activite-label"
-    }, [_vm._v("\n                                    " + _vm._s(_vm.timeFormater(tcls.start_date)) + "\n                                ")]), _vm._v(" "), index == 0 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-success align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 1 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-danger align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 2 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-primary align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 3 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-info align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 4 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-warning align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 5 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-muted align-self-start"
-    }) : _vm._e(), _vm._v(" "), _c("div", {
-      staticClass: "activity-content"
-    }, [_vm._v("\n                                    " + _vm._s(tcls.topic) + "\n                                ")])]);
-  }), 0)])])]), _vm._v(" "), _c("div", {
+      staticClass: "activity"
+    }, _vm._l(trs.resource_file, function (rf, index) {
+      return rf.file_type == "assignment" ? _c("div", {
+        key: index,
+        staticClass: "activity-item d-flex"
+      }, [_c("i", {
+        "class": ["bi bi-circle-fill activity-badge align-self-start", _vm.select_badge()]
+      }), _vm._v(" "), _c("div", {
+        staticClass: "activity-content"
+      }, [_vm._v("\n                                        " + _vm._s(rf.file_info.original_filename) + "\n                                    ")])]) : _vm._e();
+    }), 0)]);
+  })], 2)])]), _vm._v(" "), _c("div", {
     staticClass: "col-4"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(4), _vm._v(" "), _c("div", {
     staticClass: "card-body"
-  }, [_vm._m(5), _vm._v(" "), _c("div", {
-    staticClass: "activity"
-  }, _vm._l(_vm.totalClass, function (tcls, index) {
-    return _c("div", {
-      key: index,
-      staticClass: "activity-item d-flex"
+  }, [_vm._m(5), _vm._v(" "), _vm._l(_vm.totalClass, function (trs, index) {
+    return _c("fragment", {
+      key: index
     }, [_c("div", {
-      staticClass: "activite-label"
-    }, [_vm._v("\n                                    " + _vm._s(_vm.timeFormater(tcls.start_date)) + "\n                                ")]), _vm._v(" "), index == 0 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-success align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 1 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-danger align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 2 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-primary align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 3 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-info align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 4 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-warning align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 5 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-muted align-self-start"
-    }) : _vm._e(), _vm._v(" "), _c("div", {
-      staticClass: "activity-content"
-    }, [_vm._v("\n                                    " + _vm._s(tcls.topic) + "\n                                ")])]);
-  }), 0)])])])])])]);
+      staticClass: "activity"
+    }, _vm._l(trs.resource_file, function (rf, index) {
+      return rf.file_type == "study_resource" ? _c("div", {
+        key: index,
+        staticClass: "activity-item d-flex"
+      }, [_c("i", {
+        "class": ["bi bi-circle-fill activity-badge align-self-start", _vm.select_badge()]
+      }), _vm._v(" "), _c("div", {
+        staticClass: "activity-content"
+      }, [_vm._v("\n                                        " + _vm._s(rf.file_info.original_filename) + "\n                                    ")])]) : _vm._e();
+    }), 0)]);
+  })], 2)])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -651,59 +635,43 @@ var render = function render() {
     staticClass: "card"
   }, [_vm._m(2), _vm._v(" "), _c("div", {
     staticClass: "card-body"
-  }, [_vm._m(3), _vm._v(" "), _c("div", {
-    staticClass: "activity"
-  }, _vm._l(_vm.totalClass, function (tcls, index) {
-    return _c("div", {
-      key: index,
-      staticClass: "activity-item d-flex"
+  }, [_vm._m(3), _vm._v(" "), _vm._l(_vm.totalClass, function (trs, index) {
+    return _c("fragment", {
+      key: index
     }, [_c("div", {
-      staticClass: "activite-label"
-    }, [_vm._v("\n                                    " + _vm._s(_vm.timeFormater(tcls.start_date)) + "\n                                ")]), _vm._v(" "), index == 0 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-success align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 1 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-danger align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 2 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-primary align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 3 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-info align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 4 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-warning align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 5 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-muted align-self-start"
-    }) : _vm._e(), _vm._v(" "), _c("div", {
-      staticClass: "activity-content"
-    }, [_vm._v("\n                                    " + _vm._s(tcls.topic) + "\n                                ")])]);
-  }), 0)])])]), _vm._v(" "), _c("div", {
+      staticClass: "activity"
+    }, _vm._l(trs.resource_file, function (rf, index) {
+      return rf.file_type == "assignment" ? _c("div", {
+        key: index,
+        staticClass: "activity-item d-flex"
+      }, [_c("i", {
+        "class": ["bi bi-circle-fill activity-badge align-self-start", _vm.select_badge()]
+      }), _vm._v(" "), _c("div", {
+        staticClass: "activity-content"
+      }, [_vm._v("\n                                        " + _vm._s(rf.file_info.original_filename) + "\n                                    ")])]) : _vm._e();
+    }), 0)]);
+  })], 2)])]), _vm._v(" "), _c("div", {
     staticClass: "col-4"
   }, [_c("div", {
     staticClass: "card"
   }, [_vm._m(4), _vm._v(" "), _c("div", {
     staticClass: "card-body"
-  }, [_vm._m(5), _vm._v(" "), _c("div", {
-    staticClass: "activity"
-  }, _vm._l(_vm.totalClass, function (tcls, index) {
-    return _c("div", {
-      key: index,
-      staticClass: "activity-item d-flex"
+  }, [_vm._m(5), _vm._v(" "), _vm._l(_vm.totalClass, function (trs, index) {
+    return _c("fragment", {
+      key: index
     }, [_c("div", {
-      staticClass: "activite-label"
-    }, [_vm._v("\n                                    " + _vm._s(_vm.timeFormater(tcls.start_date)) + "\n                                ")]), _vm._v(" "), index == 0 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-success align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 1 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-danger align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 2 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-primary align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 3 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-info align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 4 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-warning align-self-start"
-    }) : _vm._e(), _vm._v(" "), index == 5 ? _c("i", {
-      staticClass: "bi bi-circle-fill activity-badge text-muted align-self-start"
-    }) : _vm._e(), _vm._v(" "), _c("div", {
-      staticClass: "activity-content"
-    }, [_vm._v("\n                                    " + _vm._s(tcls.topic) + "\n                                ")])]);
-  }), 0)])])])])])]);
+      staticClass: "activity"
+    }, _vm._l(trs.resource_file, function (rf, index) {
+      return rf.file_type == "study_resource" ? _c("div", {
+        key: index,
+        staticClass: "activity-item d-flex"
+      }, [_c("i", {
+        "class": ["bi bi-circle-fill activity-badge align-self-start", _vm.select_badge()]
+      }), _vm._v(" "), _c("div", {
+        staticClass: "activity-content"
+      }, [_vm._v("\n                                        " + _vm._s(rf.file_info.original_filename) + "\n                                    ")])]) : _vm._e();
+    }), 0)]);
+  })], 2)])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,

@@ -26,16 +26,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       subject: {
         name: ""
       },
-      subjects: []
+      subjects: [],
+      current_subject_id: '',
+      dispaly_mode: "fetch-subjects"
     };
   },
   props: {
     mode: String
   },
   mounted: function mounted() {
+    this.dispaly_mode = this.mode;
     this.getSubjects();
   },
   methods: {
+    editSubject: function editSubject(sub) {
+      this.current_subject_id = sub.id;
+      this.dispaly_mode = "edit-subject";
+      this.subject = {
+        name: sub.name
+      };
+    },
+    deleteSubject: function deleteSubject(sub) {
+      this.current_subject_id = sub.id;
+      this.deleteAlert(this.current_subject_id, "subject");
+    },
+    confirmDeleteSubject: function confirmDeleteSubject(subject_id) {
+      var _this = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var urlText, deleteResponse;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              urlText = "subject/" + subject_id + "/delete";
+              _context.next = 3;
+              return _this["delete"](urlText);
+            case 3:
+              deleteResponse = _context.sent;
+              _this.getSubjects();
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
     callBack: function callBack() {
       this.save();
     },
@@ -43,51 +77,61 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.checkValidation(this.callBack);
     },
     save: function save() {
-      var _this = this;
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var formData, postResponse, urlText;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              formData = new FormData();
-              formData.append("subject_info[name]", _this.subject.name);
-              postResponse = {};
-              urlText = "addSubject";
-              _context.next = 6;
-              return _this.post(urlText, formData);
-            case 6:
-              postResponse = _context.sent;
-              _this.subject = {
-                name: ""
-              };
-              _this.$router.push({
-                name: "subject"
-              });
-            case 9:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }))();
-    },
-    getSubjects: function getSubjects() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var urlText, getResponse;
+        var formData, postResponse, urlText;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              urlText = "getSubjects/false";
-              _context2.next = 3;
-              return _this2.get(urlText, 1, true);
-            case 3:
-              getResponse = _context2.sent;
-              _this2.subjects = getResponse.data.data;
-            case 5:
+              formData = new FormData();
+              formData.append("subject_info[name]", _this2.subject.name);
+              if (_this2.dispaly_mode == "edit-subject") {
+                formData.append("subject_extra_info[mode]", "edit");
+                formData.append("subject_extra_info[current_subject_id]", _this2.current_subject_id);
+              } else {
+                formData.append("subject_extra_info[mode]", "new-record");
+              }
+              postResponse = {};
+              urlText = "addSubject";
+              _context2.next = 7;
+              return _this2.post(urlText, formData);
+            case 7:
+              postResponse = _context2.sent;
+              _this2.subject = {
+                name: ""
+              };
+              if (_this2.dispaly_mode == 'edit-subject') {
+                _this2.getSubjects();
+                _this2.dispaly_mode = 'fetch-subjects';
+              }
+              _this2.$router.push({
+                name: "subject"
+              });
+            case 11:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
+      }))();
+    },
+    getSubjects: function getSubjects() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var urlText, getResponse;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              urlText = "getSubjects/false";
+              _context3.next = 3;
+              return _this3.get(urlText, 1, true);
+            case 3:
+              getResponse = _context3.sent;
+              _this3.subjects = getResponse.data.data;
+            case 5:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     }
   }
@@ -140,7 +184,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.mode == "fetch-subjects" ? _c("div", {
+  }, [_vm.dispaly_mode == "fetch-subjects" ? _c("div", {
     staticClass: "card"
   }, [_c("div", {
     staticClass: "card-body"
@@ -172,7 +216,25 @@ var render = function render() {
       attrs: {
         scope: "row"
       }
-    }, [_vm._v(_vm._s(index + 1))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(sub.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(sub.created_at))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(sub.updated_at))])]);
+    }, [_vm._v(_vm._s(index + 1))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(sub.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(sub.created_at))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(sub.updated_at))]), _vm._v(" "), _c("td", {
+      staticClass: "align-middle"
+    }, [_c("i", {
+      staticClass: "bi bi-pencil hand",
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.editSubject(sub);
+        }
+      }
+    }), _vm._v(" "), _c("i", {
+      staticClass: "bi bi-trash hand ml-2",
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.deleteSubject(sub);
+        }
+      }
+    })])]);
   }), 0)])])]) : _c("div", {
     staticClass: "card"
   }, [_c("div", {
@@ -265,7 +327,11 @@ var staticRenderFns = [function () {
     attrs: {
       scope: "col"
     }
-  }, [_vm._v("Updated")])])]);
+  }, [_vm._v("Updated")]), _vm._v(" "), _c("th", {
+    attrs: {
+      scope: "col"
+    }
+  }, [_vm._v("Action")])])]);
 }];
 render._withStripped = true;
 

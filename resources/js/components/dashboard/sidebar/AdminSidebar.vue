@@ -30,19 +30,20 @@
   </a>
 </li><!-- End Teacher Nav -->
 
-<li class="nav-item">
+<!-- <li class="nav-item">
   <a class="nav-link collapsed">
     <i class="bi bi-send"></i>
     <span>Send SMS</span>
   </a>
-</li><!-- End Send SMS Nav -->
+</li> -->
+<!-- End Send SMS Nav -->
 
 <li class="nav-item">
   <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
     <i class="bi bi-gear"></i><span>Setting</span><i class="bi bi-chevron-down ms-auto"></i>
   </a>
   <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-    <li>
+    <!-- <li>
       <a @click.stop="$root.changeRoute('/register-student')" class="hand">
         <i class="bi bi-circle"></i><span>Register Student</span>
       </a>
@@ -51,7 +52,7 @@
       <a @click.stop="$root.changeRoute('/register-teacher')" class="hand">
         <i class="bi bi-circle"></i><span>Register Teacher</span>
       </a>
-    </li>
+    </li> -->
     <li>
       <a @click.stop="$root.changeRoute('/subject')" class="hand">
         <i class="bi bi-circle"></i><span>Subject</span>

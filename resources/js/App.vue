@@ -1,6 +1,7 @@
 <template>
     <fragment>
-      <log-in v-if="!isAuthenticate" />
+      <forgot-password v-if="($route.name=='resetPassword')&&!isAuthenticate"/>
+      <log-in v-else-if="($route.name=='log-in')&&!isAuthenticate" />
       <main-component v-else />
   </fragment>
 </template>
@@ -10,6 +11,7 @@ import LogIn from './components/Login.vue'
 import { loginInfoStore } from './stores/loginInfo';
 import MainComponent from "./components/dashboard/Main.vue";
 import { mapState } from 'pinia'
+import ForgotPassword from './components/ForgotPassword.vue'
 
 export default {
   data: function () {
@@ -18,7 +20,8 @@ export default {
   },
   components: {
     'log-in': LogIn,
-    'main-component': MainComponent
+    'main-component': MainComponent,
+    "forgot-password":ForgotPassword
   },
   computed: {
     ...mapState(loginInfoStore, ['isAuthenticate']),

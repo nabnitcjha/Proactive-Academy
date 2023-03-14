@@ -17,12 +17,12 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
+    Route::post('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
+    Route::post('me', [App\Http\Controllers\AuthController::class, 'me']);
 });
-
+Route::post('forgot-password', [App\Http\Controllers\StudentController::class, 'forgotPassword']);
 // student routes
 Route::group([
 
@@ -31,24 +31,32 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('addStudent', 'StudentController@saveData');
-    Route::get('getStudents/{allowPagination}', 'StudentController@getData');
+    Route::post('addStudent', [App\Http\Controllers\StudentController::class, 'saveData']);
+    Route::get('getStudents/{allowPagination}', [App\Http\Controllers\StudentController::class, 'getData']);
+    Route::delete('student/{id}/delete', [App\Http\Controllers\StudentController::class, 'deleteStudent']);
 
     // student-detail page route
-    Route::get('student/{id}/detailForAdmin', 'StudentController@detailForAdmin');
-    Route::get('student/{student_id}/teacher/{teacher_id}/class', 'StudentController@getTeacherSlot');
+    Route::get('student/{id}/detailForAdmin', [App\Http\Controllers\StudentController::class, 'detailForAdmin']);
+    Route::get('student/{student_id}/teacher/{teacher_id}/class', [App\Http\Controllers\StudentController::class, 'getTeacherSlot']);
     // Route::get('teacher/{teacher_id}/student/{student_id}/class', 'StudentController@getTeacherSlot');
-    Route::get('student/{id}/sortedClass', 'StudentController@sortedClass');
-    Route::get('admin/sortedClass', 'StudentController@adminSortedClass');
-    Route::get('student/{id}/class', 'StudentController@allClasses');
+    Route::get('student/{id}/sortedClass', [App\Http\Controllers\StudentController::class, 'sortedClass']);
+    Route::get('student/{id}/todayClass', [App\Http\Controllers\StudentController::class, 'todayClass']);
+    Route::get('admin/sortedClass', [App\Http\Controllers\StudentController::class, 'adminSortedClass']);
+    Route::get('student/{id}/class',[App\Http\Controllers\StudentController::class, 'allClasses'] );
 
     // student login route
-    Route::get('student/{id}/teacher', 'StudentController@getTeacher');
-    Route::get('teacher/{teacher_id}/student/{student_id}/detail', 'StudentController@detail');
-    Route::get('student/{student_id}/detailForParent', 'StudentController@detailForParent');
+    Route::get('student/{id}/teacher',[App\Http\Controllers\StudentController::class, 'getTeacher'] );
+    Route::get('teacher/{teacher_id}/student/{student_id}/detail', [App\Http\Controllers\StudentController::class, 'detail']);
+    Route::get('student/{student_id}/detailForParent',[App\Http\Controllers\StudentController::class, 'detailForParent'] );
 
     // admin dashboard
-    Route::get('admin/dashboard', 'StudentController@adminDashboard');
+    Route::get('admin/dashboard', [App\Http\Controllers\StudentController::class, 'adminDashboard']);
+
+    // parent dashboard
+    Route::get('parent/{id}/todayClass',[App\Http\Controllers\StudentController::class, 'todayClass'] );
+
+    // forgot password
+    
 });
 
 // teacher routes
@@ -58,16 +66,18 @@ Route::group([
     'namespace' => 'App\Http\Controllers'
 
 ], function ($router) {
-    Route::get('teacher/{id}/profileOverview', 'TeacherController@profileOverview');
-    Route::get('getTeachers/{allowPagination}', 'TeacherController@getData');
-    Route::get('teacher/{id}/sortedClass', 'TeacherController@sortedClass');
-    Route::get('teacher/{id}/class', 'TeacherController@allClasses');
-    Route::post('addTeacher', 'TeacherController@saveData');
-    Route::get('getTeachers/{allowPagination}', 'TeacherController@getData');
+    Route::get('teacher/{id}/profileOverview', [App\Http\Controllers\TeacherController::class, 'profileOverview']);
+    Route::get('getTeachers/{allowPagination}',[App\Http\Controllers\TeacherController::class, 'getData'] );
+    Route::get('teacher/{id}/sortedClass',[App\Http\Controllers\TeacherController::class, 'sortedClass'] );
+    Route::get('teacher/{id}/todayClass',[App\Http\Controllers\TeacherController::class, 'todayClass'] );
+    Route::get('teacher/{id}/class', [App\Http\Controllers\TeacherController::class, 'allClasses']);
+    Route::post('addTeacher', [App\Http\Controllers\TeacherController::class, 'saveData']);
+    Route::get('getTeachers/{allowPagination}', [App\Http\Controllers\TeacherController::class, 'getData']);
+    Route::delete('teacher/{id}/delete', [App\Http\Controllers\TeacherController::class, 'deleteTeacher']);
 
     // teacher login route
-    Route::get('teacher/{id}/student', 'TeacherController@getStudent');
-    Route::get('student/{student_id}/teacher/{teacher_id}/detail', 'TeacherController@detail');
+    Route::get('teacher/{id}/student', [App\Http\Controllers\TeacherController::class, 'getStudent']);
+    Route::get('student/{student_id}/teacher/{teacher_id}/detail', [App\Http\Controllers\TeacherController::class, 'detail']);
 });
 
 // subject routes
@@ -78,8 +88,9 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('addSubject', 'SubjectController@saveData');
-    Route::get('getSubjects/{allowPagination}', 'SubjectController@getData');
+    Route::post('addSubject', [App\Http\Controllers\SubjectController::class, 'saveData']);
+    Route::get('getSubjects/{allowPagination}', [App\Http\Controllers\SubjectController::class, 'getData']);
+    Route::delete('subject/{id}/delete', [App\Http\Controllers\SubjectController::class, 'deleteSubject']);
 });
 
 // class-schedule routes
@@ -90,19 +101,20 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('addTimetable', 'ClassScheduleController@saveData');
-    Route::get('getTimetables/{allowPagination}', 'ClassScheduleController@getData');
-    Route::post('timetable/{id}/drag', 'ClassScheduleController@dragUpdate');
-    Route::post('timetable/{id}/resourceFile', 'ClassScheduleController@saveResourceFile');
-    Route::get('student/{student_id}/timetable/{class_schedule_id}/resourceFile', 'ClassScheduleController@getResourceFile');
+    Route::post('addTimetable', [App\Http\Controllers\ClassScheduleController::class, 'saveData']);
+    Route::get('getTimetables/{allowPagination}',[App\Http\Controllers\ClassScheduleController::class, 'getData'] );
+    Route::post('timetable/{id}/drag',[App\Http\Controllers\ClassScheduleController::class, 'dragUpdate'] );
+    Route::post('timetable/{id}/resourceFile',[App\Http\Controllers\ClassScheduleController::class, 'saveResourceFile'] );
+    Route::get('student/{student_id}/timetable/{class_schedule_id}/resourceFile',[App\Http\Controllers\ClassScheduleController::class, 'getResourceFile'] );
 
-    Route::post('assignment/{id}/answer', 'ClassScheduleController@assignmentAnswer');
+    Route::post('assignment/{id}/answer', [App\Http\Controllers\ClassScheduleController::class, 'fetchMessages']);
 
-    Route::get('downloadFile/{id}', 'uploadImageOrFileController@downloadFile');
-    Route::get('displayFile/{id}', 'uploadImageOrFileController@displayFile');
-    Route::get('assignment/{id}/delete', 'ClassScheduleController@deleteAssignment');
-    Route::post('saveZoomLink', 'ClassScheduleController@saveZoomLink');
-    Route::get('timetable/{class_unique_id}', 'ClassScheduleController@getClassAccordingUniqueId');
+    Route::get('downloadFile/{id}',[App\Http\Controllers\uploadImageOrFileController::class, 'downloadFile']);
+    Route::get('displayFile/{id}', [App\Http\Controllers\uploadImageOrFileController::class, 'displayFile']);
+    Route::get('assignment/{id}/delete', [App\Http\Controllers\ClassScheduleController::class, 'deleteAssignment']);
+    Route::post('saveZoomLink', [App\Http\Controllers\ClassScheduleController::class, 'saveZoomLink']);
+    Route::get('timetable/{class_unique_id}',[App\Http\Controllers\ClassScheduleController::class, 'getClassAccordingUniqueId'] );
+    Route::delete('timetable/{class_unique_id}/delete',[App\Http\Controllers\ClassScheduleController::class, 'deleteTimetable'] );
 });
 
 // chat routes

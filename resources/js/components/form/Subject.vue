@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-lg-12">
-            <div class="card" v-if="mode == 'fetch-subjects'">
+            <div class="card" v-if="dispaly_mode == 'fetch-subjects'">
                 <div class="card-body">
                     <div class="add-item">
                         <h5 class="card-title">Subject List</h5>
@@ -21,6 +21,7 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Created</th>
                                 <th scope="col">Updated</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,6 +30,16 @@
                                 <td>{{ sub.name }}</td>
                                 <td>{{ sub.created_at }}</td>
                                 <td>{{ sub.updated_at }}</td>
+                                <td class="align-middle">
+                                    <i
+                                        class="bi bi-pencil hand"
+                                        @click.stop="editSubject(sub)"
+                                    ></i>
+                                    <i
+                                        class="bi bi-trash hand ml-2"
+                                        @click.stop="deleteSubject(sub)"
+                                    ></i>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -103,15 +114,34 @@ export default {
                 name: "",
             },
             subjects: [],
+            current_subject_id:'',
+            dispaly_mode: "fetch-subjects"
         };
     },
     props: {
         mode: String,
     },
     mounted(){
+        this.dispaly_mode = this.mode;
         this.getSubjects();
     },
     methods: {
+        editSubject(sub) {
+            this.current_subject_id = sub.id;
+            this.dispaly_mode = "edit-subject";
+            this.subject = {
+                name: sub.name
+            };
+        },
+        deleteSubject(sub) {
+            this.current_subject_id = sub.id;
+            this.deleteAlert(this.current_subject_id, "subject");
+        },
+        async confirmDeleteSubject(subject_id) {
+            let urlText = "subject/" + subject_id + "/delete";
+            let deleteResponse = await this.delete(urlText);
+            this.getSubjects();
+        },
         callBack() {
             this.save();
         },
@@ -122,11 +152,24 @@ export default {
             let formData = new FormData();
 
             formData.append("subject_info[name]", this.subject.name);
+            if (this.dispaly_mode == "edit-subject") {
+                formData.append("subject_extra_info[mode]", "edit");
+                formData.append(
+                    "subject_extra_info[current_subject_id]",
+                    this.current_subject_id
+                );
+            } else {
+                formData.append("subject_extra_info[mode]", "new-record");
+            }
             let postResponse = {};
             let urlText = "addSubject";
 
             postResponse = await this.post(urlText, formData);
             this.subject = { name: "" };
+            if (this.dispaly_mode=='edit-subject') {
+                this.getSubjects();
+                this.dispaly_mode = 'fetch-subjects';
+            }
             this.$router.push({ name: "subject" });
         },
         async getSubjects() {

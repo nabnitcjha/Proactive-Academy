@@ -1473,7 +1473,7 @@ export default {
 
             let getResponse = await this.get(urlText, id, false);
 
-            this.sorted_class = getResponse.data;
+            this.sorted_class = getResponse.data.data;
         },
         setShowDiscussion() {
             this.showDiscussion = true;

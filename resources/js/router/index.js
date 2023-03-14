@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
+import ForgotPassword from '../components/ForgotPassword.vue'
 
 Vue.use(VueRouter)
 
@@ -11,10 +12,16 @@ const routes = [
     component: Login
   },
   {
+    path: '/forgot-password',
+    name: 'resetPassword',
+    component: ForgotPassword
+  },
+  {
     path: '/chat',
     name: 'chat',
     component: () => import('../views/Chat.vue')
   },
+  
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -133,7 +140,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  linkActiveClass: 'active',
+  // linkActiveClass: 'active',
   routes
 })
 

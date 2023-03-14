@@ -13,6 +13,7 @@ use App\Models\StudentTeacher;
 use App\Models\TeacherSubject;
 use App\Models\Assignment_Answer;
 use App\Models\TeacherAssignment;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\ClassScheduleResource;
 use App\Http\Resources\UploadImageOrFileResource;
@@ -202,6 +203,7 @@ class ClassScheduleController extends BaseController
                 parent::createModelObject("App\Models\TeacherSubject");
                 $teacher_subject_info["teacher_id"] = $class_schedule->teacher_id;
                 $teacher_subject_info["subject_id"] = $class_schedule->subject_id;
+                $teacher_subject_info["class_unique_id"] = $class_schedule->class_unique_id;
                 parent::store($teacher_subject_info);
             }
 
@@ -224,6 +226,7 @@ class ClassScheduleController extends BaseController
                     parent::createModelObject("App\Models\StudentSubject");
                     $student_subject_info["student_id"] = $student['id'];
                     $student_subject_info["subject_id"] = $class_schedule->subject_id;
+                    $student_subject_info["class_unique_id"] = $class_schedule->class_unique_id;
                     parent::store($student_subject_info);
                 }
 
@@ -236,6 +239,7 @@ class ClassScheduleController extends BaseController
                     parent::createModelObject("App\Models\StudentTeacher");
                     $student_teacher_info["student_id"] = $student['id'];
                     $student_teacher_info["teacher_id"] = $class_schedule->teacher_id;
+                    $student_teacher_info["class_unique_id"] = $class_schedule->class_unique_id;
                     parent::store($student_teacher_info);
                 }
             }
@@ -251,13 +255,21 @@ class ClassScheduleController extends BaseController
         return parent::show($id);
     }
 
+    public function deleteTimetable($class_unique_id)
+    {
+        ClassSchedule::where('class_unique_id',$class_unique_id)->delete();
+        StudentTeacher::where('class_unique_id',$class_unique_id)->delete();
+        DB::table('student_subjects')->where('class_unique_id',$class_unique_id)->delete();
+        DB::table('teacher_subjects')->where('class_unique_id',$class_unique_id)->delete();
+
+        return $this->successMessage('class deleted successfully');
+    }
+
     public function deleteAssignment($id)
     {
         Assignment::where('assignment', $id)->delete();
-        TeacherAssignment::where('assignment_id', $id)->delete();
-        Assignment_Answer::where('assignment_id', $id)->delete();
 
-        $this->successMessage('delete successfully');
+        return $this->successMessage('assignment deleted successfully');
     }
 
     public function getClassAccordingUniqueId($class_unique_id)

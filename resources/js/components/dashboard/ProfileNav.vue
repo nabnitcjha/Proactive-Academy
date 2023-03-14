@@ -38,7 +38,7 @@
             <li>
                 <a
                     class="dropdown-item d-flex align-items-center hand"
-                    @click.stop="logOut"
+                    @click.stop="signOut"
                 >
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Sign Out</span>
@@ -49,8 +49,9 @@
     </li>
 </template>
 <script>
+
 import { loginInfoStore } from "../../stores/loginInfo";
-import { mapState } from "pinia";
+import { mapState , mapActions} from "pinia";
 import { profileImg, Student } from "../../assets/dashboard/index";
 export default {
     data() {
@@ -62,7 +63,15 @@ export default {
         user_name: String,
         user_role: String,
     },
+    methods:{
+        ...mapActions(loginInfoStore, ["setDefaultImage"]),
 
+      async  signOut(){
+           let response = await this.logOut();
+           this.setDefaultImage('');
+        }
+    },
+    
     computed: {
         ...mapState(loginInfoStore, ["getLoginInfo", "getDefaultImage"]),
         fetchImage() {

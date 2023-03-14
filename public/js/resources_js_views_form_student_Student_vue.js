@@ -36,6 +36,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   data: function data() {
     return {
       students: [],
+      dispaly_mode: "",
+      current_student_id: "",
+      current_user_id: "",
       icons: {
         First_name: _Assets_formIcons_index__WEBPACK_IMPORTED_MODULE_0__.First_name,
         Last_name: _Assets_formIcons_index__WEBPACK_IMPORTED_MODULE_0__.Last_name,
@@ -54,11 +57,13 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         Dob: "",
         Country: ""
       },
+      removedParentEmail: [],
       dynamicParentList: [{
         First_name: "",
         Last_name: "",
         Phone: "",
         Email: "",
+        type: "new",
         parent_id: 1
       }]
     };
@@ -68,9 +73,49 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   },
   computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_2__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo"])),
   mounted: function mounted() {
+    this.dispaly_mode = this.mode;
     this.getStudents();
   },
   methods: {
+    previousRoute: function previousRoute() {
+      if (this.dispaly_mode == "edit-student") {
+        this.dispaly_mode = "fetch-students";
+        // this.$router.push({ name: "student" });
+      } else {
+        this.$router.go(-1);
+      }
+    },
+    editStudent: function editStudent(stu) {
+      this.current_student_id = stu.id;
+      this.current_user_id = stu.user_id;
+      var parentList = [];
+      this.dispaly_mode = "edit-student";
+      this.student = {
+        First_name: stu.first_name,
+        Last_name: stu.last_name,
+        Phone: stu.phone,
+        // Email: stu.email,
+        Dob: this.dateFormater(stu.dob),
+        Country: stu.country
+      };
+      stu.guardian.map(function (rec) {
+        parentList.push({
+          First_name: rec.first_name,
+          Last_name: rec.last_name,
+          Phone: rec.phone,
+          email: rec.email,
+          parent_id: rec.id,
+          current_user_id: rec.user_id,
+          current_parent_id: rec.id,
+          type: "old"
+        });
+      });
+      this.dynamicParentList = parentList;
+    },
+    deleteStudent: function deleteStudent(student) {
+      this.current_student_id = student.id;
+      this.deleteAlert(this.current_student_id, "student");
+    },
     checkSubject: function checkSubject(val) {
       var results = [];
       if (this.getLoginInfo.user.role == "teacher") {
@@ -99,23 +144,48 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              dynamic_parent_list = _this.dynamicParentList.map(function (data) {
-                return {
-                  first_name: data.First_name,
-                  last_name: data.Last_name,
-                  full_name: data.First_name + " " + data.Last_name,
-                  role: "parent",
-                  phone: data.Phone,
-                  email: data.Email,
-                  password: "1234"
-                };
-              });
+              dynamic_parent_list = [];
+              if (_this.dispaly_mode == "edit-student") {
+                dynamic_parent_list = _this.dynamicParentList.map(function (data) {
+                  return {
+                    first_name: data.First_name,
+                    last_name: data.Last_name,
+                    full_name: data.First_name + " " + data.Last_name,
+                    role: "parent",
+                    phone: data.Phone,
+                    email: data.Email,
+                    password: "1234",
+                    current_parent_id: data.current_parent_id,
+                    current_user_id: data.current_user_id
+                  };
+                });
+              } else {
+                dynamic_parent_list = _this.dynamicParentList.map(function (data) {
+                  return {
+                    first_name: data.First_name,
+                    last_name: data.Last_name,
+                    full_name: data.First_name + " " + data.Last_name,
+                    role: "parent",
+                    phone: data.Phone,
+                    email: data.Email,
+                    password: "1234"
+                  };
+                });
+              }
               formData = new FormData();
+              if (_this.dispaly_mode == "edit-student") {
+                formData.append("user_extra_info[mode]", "edit");
+                formData.append("user_extra_info[current_user_id]", _this.current_user_id);
+                formData.append("user_extra_info[current_student_id]", _this.current_student_id);
+                formData.append("remove_parent_info", JSON.stringify(_this.removedParentEmail));
+              } else {
+                formData.append("user_extra_info[mode]", "new-record");
+                formData.append("user_info[email]", _this.student.Email);
+              }
               formData.append("user_info[first_name]", _this.student.First_name);
               formData.append("user_info[last_name]", _this.student.Last_name);
               formData.append("user_info[role]", "student");
               formData.append("user_info[password]", "1234");
-              formData.append("user_info[email]", _this.student.Email);
               formData.append("student_info[phone]", _this.student.Phone);
               formData.append("student_info[dob]", _this.student.Dob);
               formData.append("student_info[full_name]", _this.student.First_name + " " + _this.student.Last_name);
@@ -123,9 +193,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
               formData.append("parent_info", JSON.stringify(dynamic_parent_list));
               postResponse = {};
               urlText = "addStudent";
-              _context.next = 16;
+              _context.next = 17;
               return _this.post(urlText, formData);
-            case 16:
+            case 17:
               postResponse = _context.sent;
               _this.student = {};
               _this.dynamicParentList = [{
@@ -135,10 +205,14 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
                 Email: "",
                 parent_id: 1
               }];
-              _this.$router.push({
-                name: "student"
-              });
-            case 20:
+              if (_this.dispaly_mode == "edit-student") {
+                _this.getStudents();
+              } else {
+                _this.$router.push({
+                  name: "student"
+                });
+              }
+            case 21:
             case "end":
               return _context.stop();
           }
@@ -160,49 +234,81 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       var dynamicList = _toConsumableArray(this.dynamicParentList);
       dynamicList.push({
         parent_id: this.dynamicParentList.length + 1,
-        first_name: "",
-        last_name: "",
-        phone: "",
-        email: ""
+        First_name: "",
+        Last_name: "",
+        Phone: "",
+        Email: "",
+        type: "new"
       });
       this.dynamicParentList = dynamicList;
     },
     removeParent: function removeParent(parent_id) {
+      if (this.dispaly_mode == "edit-student") {
+        var parentInfo = this.dynamicParentList.filter(function (parentItem) {
+          return parentItem.parent_id == parent_id;
+        });
+        if (parentInfo.length > 0) {
+          this.removedParentEmail.push(parentInfo[0].email);
+        }
+      }
       this.dynamicParentList = this.dynamicParentList.filter(function (parentItem) {
         return parentItem.parent_id !== parent_id;
       });
     },
-    getStudents: function getStudents() {
+    confirmDeleteStudent: function confirmDeleteStudent(student_id) {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var urlText, getResponse;
+        var urlText, deleteResponse;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(_this2.getLoginInfo.user.role == "parent")) {
-                _context2.next = 4;
-                break;
-              }
-              _this2.students = _this2.getLoginInfo.student_info;
-              _context2.next = 10;
-              break;
-            case 4:
-              urlText = "";
-              if (_this2.getLoginInfo.user.role == "teacher") {
-                urlText = "teacher/" + _this2.getLoginInfo.teacher_info.id + "/student";
-              } else {
-                urlText = "getStudents/false";
-              }
-              _context2.next = 8;
-              return _this2.get(urlText, 1, false);
-            case 8:
-              getResponse = _context2.sent;
-              _this2.students = getResponse.data.data;
-            case 10:
+              urlText = "student/" + student_id + "/delete";
+              _context2.next = 3;
+              return _this2["delete"](urlText);
+            case 3:
+              deleteResponse = _context2.sent;
+              _this2.getStudents();
+            case 5:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
+      }))();
+    },
+    getStudents: function getStudents() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var urlText, getResponse;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              if (!(_this3.getLoginInfo.user.role == "parent")) {
+                _context3.next = 4;
+                break;
+              }
+              _this3.students = _this3.getLoginInfo.student_info;
+              _context3.next = 11;
+              break;
+            case 4:
+              urlText = "";
+              if (_this3.getLoginInfo.user.role == "teacher") {
+                urlText = "teacher/" + _this3.getLoginInfo.teacher_info.id + "/student";
+              } else {
+                urlText = "getStudents/false";
+              }
+              _context3.next = 8;
+              return _this3.get(urlText, 1, false);
+            case 8:
+              getResponse = _context3.sent;
+              _this3.students = getResponse.data.data;
+              if (_this3.dispaly_mode == "edit-student") {
+                _this3.dispaly_mode = "fetch-students";
+              }
+            case 11:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     }
   }
@@ -255,7 +361,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.mode == "fetch-students" ? _c("div", {
+  }, [_vm.dispaly_mode == "fetch-students" ? _c("div", {
     staticClass: "card"
   }, [_c("div", {
     staticClass: "card-body"
@@ -296,10 +402,6 @@ var render = function render() {
     attrs: {
       scope: "col"
     }
-  }, [_vm._v("Phone")]), _vm._v(" "), _c("th", {
-    attrs: {
-      scope: "col"
-    }
   }, [_vm._v("Subject")]), _vm._v(" "), _vm.getLoginInfo.user.role == "admin" ? _c("th", {
     attrs: {
       scope: "col"
@@ -308,7 +410,11 @@ var render = function render() {
     attrs: {
       scope: "col"
     }
-  }, [_vm._v("Parent")])])]), _vm._v(" "), _c("tbody", _vm._l(_vm.students, function (std, index) {
+  }, [_vm._v("Parent")]), _vm._v(" "), _vm.getLoginInfo.user.role == "admin" ? _c("th", {
+    attrs: {
+      scope: "col"
+    }
+  }, [_vm._v("Action")]) : _vm._e()])]), _vm._v(" "), _c("tbody", _vm._l(_vm.students, function (std, index) {
     return _c("tr", {
       key: index
     }, [_c("th", {
@@ -330,13 +436,6 @@ var render = function render() {
         }
       }
     }, [_vm._v("\n                                " + _vm._s(std.email) + "\n                            ")]), _vm._v(" "), _c("td", {
-      on: {
-        click: function click($event) {
-          $event.stopPropagation();
-          return _vm.$root.changeRoute("/student/" + std.id + "/detail");
-        }
-      }
-    }, [_vm._v("\n                                " + _vm._s(std.phone) + "\n                            ")]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.stopPropagation();
@@ -369,7 +468,25 @@ var render = function render() {
       return _c("b-list-group-item", {
         key: gu.id
       }, [_vm._v(_vm._s(gu.full_name))]);
-    }), 1)], 1)]);
+    }), 1)], 1), _vm._v(" "), _vm.getLoginInfo.user.role == "admin" ? _c("td", {
+      staticClass: "align-middle"
+    }, [_c("i", {
+      staticClass: "bi bi-pencil hand",
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.editStudent(std);
+        }
+      }
+    }), _vm._v(" "), _c("i", {
+      staticClass: "bi bi-trash hand ml-2",
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.deleteStudent(std);
+        }
+      }
+    })]) : _vm._e()]);
   }), 0)])])]) : _c("div", {
     staticClass: "card"
   }, [_c("div", {
@@ -378,7 +495,7 @@ var render = function render() {
     staticClass: "add-item"
   }, [_c("h5", {
     staticClass: "card-title"
-  }, [_vm._v("Student Info")]), _vm._v(" "), _vm.$route.name == "addStudent" ? _c("button", {
+  }, [_vm._v("Student Info")]), _vm._v(" "), _vm.dispaly_mode != "fetch-students" ? _c("button", {
     staticClass: "btn btn-back",
     attrs: {
       type: "button"
@@ -386,7 +503,7 @@ var render = function render() {
     on: {
       click: function click($event) {
         $event.stopPropagation();
-        return _vm.$router.go(-1);
+        return _vm.previousRoute.apply(null, arguments);
       }
     }
   }, [_vm._v("\n                        BACK\n                    ")]) : _vm._e()]), _vm._v(" "), _c("hr", {
@@ -501,7 +618,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("div", {
     staticClass: "invalid-feedback"
-  }, [_vm._v("\n                            Please choose a phone.\n                        ")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                            Please choose a phone.\n                        ")])]), _vm._v(" "), _vm.dispaly_mode != "edit-student" ? _c("div", {
     staticClass: "col-md-4"
   }, [_c("label", {
     staticClass: "form-label",
@@ -536,7 +653,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("div", {
     staticClass: "invalid-feedback"
-  }, [_vm._v("\n                            Please choose a email.\n                        ")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                            Please choose a email.\n                        ")])]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "col-md-4"
   }, [_c("label", {
     staticClass: "form-label",
@@ -728,7 +845,7 @@ var render = function render() {
       }
     }), _vm._v(" "), _c("div", {
       staticClass: "invalid-feedback"
-    }, [_vm._v("\n                                Please choose a phone.\n                            ")])]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                                Please choose a phone.\n                            ")])]), _vm._v(" "), _input.type == "new" ? _c("div", {
       staticClass: "col-md-4"
     }, [_c("label", {
       staticClass: "form-label",
@@ -766,7 +883,20 @@ var render = function render() {
       }
     }), _vm._v(" "), _c("div", {
       staticClass: "invalid-feedback"
-    }, [_vm._v("\n                                Please choose a email.\n                            ")])]), _vm._v(" "), index == 0 ? _c("div", {
+    }, [_vm._v("\n                                Please choose a email.\n                            ")])]) : _vm._e(), _vm._v(" "), index == 0 && _vm.dispaly_mode == "edit-student" ? _c("div", {
+      staticClass: "col-md-4 remove-guardian"
+    }, [_vm._v("\n                            Remove Guardians  \n                            "), _c("i", {
+      staticClass: "bi bi-dash-circle remove-guardian-icon",
+      staticStyle: {
+        color: "red"
+      },
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.removeParent(_input.parent_id);
+        }
+      }
+    })]) : _vm._e(), _vm._v(" "), index == 0 ? _c("div", {
       staticClass: "col-md-4 add-guardian"
     }, [_vm._v("\n                            Add Guardians  \n                            "), _c("i", {
       staticClass: "bi bi-plus-circle add-guardian-icon",

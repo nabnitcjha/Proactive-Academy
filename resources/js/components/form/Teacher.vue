@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-lg-12">
-            <div class="card" v-if="mode == 'fetch-teachers'">
+            <div class="card" v-if="dispaly_mode == 'fetch-teachers'">
                 <div class="card-body">
                     <div class="add-item">
                         <h5 class="card-title">Teacher List</h5>
@@ -9,7 +9,7 @@
                             type="button"
                             class="btn btn-add"
                             @click.stop="$root.changeRoute('/add-teacher')"
-                            v-if="getLoginInfo.user.role=='admin'"
+                            v-if="getLoginInfo.user.role == 'admin'"
                         >
                             <i class="bi bi-plus"></i> ADD TEACHER
                         </button>
@@ -23,28 +23,92 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Subject</th>
-                                <th scope="col" v-if="getLoginInfo.user.role=='admin'">Student</th>
+                                <th
+                                    scope="col"
+                                    v-if="getLoginInfo.user.role == 'admin'"
+                                >
+                                    Student
+                                </th>
+                                <th scope="col" v-if="getLoginInfo.user.role=='admin'">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(tech,index) in teachers" :key="index" class="hand">
+                            <tr
+                                v-for="(tech, index) in teachers"
+                                :key="index"
+                                class="hand"
+                            >
                                 <th scope="row">{{ index + 1 }}</th>
-                                <td @click.stop="$root.changeRoute('/teacher/'+tech.id+'/detail')">{{ tech.full_name }}</td>
-                                <td @click.stop="$root.changeRoute('/teacher/'+tech.id+'/detail')">{{ tech.email }}</td>
-                                <td @click.stop="$root.changeRoute('/teacher/'+tech.id+'/detail')">{{ tech.phone }}</td>
-                                <td @click.stop="$root.changeRoute('/teacher/'+tech.id+'/detail')">
-                                    <b-list-group>
-                                        <b-list-group-item  v-for="sb in tech.subject" :key="sb.id">{{ sb.name }}</b-list-group-item>
-                                    </b-list-group>
+                                <td
+                                    @click.stop="
+                                        $root.changeRoute(
+                                            '/teacher/' + tech.id + '/detail'
+                                        )
+                                    "
+                                >
+                                    {{ tech.full_name }}
                                 </td>
-                                <td @click.stop="$root.changeRoute('/teacher/'+tech.id+'/detail')"
-                                v-if="getLoginInfo.user.role=='admin'"
+                                <td
+                                    @click.stop="
+                                        $root.changeRoute(
+                                            '/teacher/' + tech.id + '/detail'
+                                        )
+                                    "
+                                >
+                                    {{ tech.email }}
+                                </td>
+                                <td
+                                    @click.stop="
+                                        $root.changeRoute(
+                                            '/teacher/' + tech.id + '/detail'
+                                        )
+                                    "
+                                >
+                                    {{ tech.phone }}
+                                </td>
+                                <td
+                                    @click.stop="
+                                        $root.changeRoute(
+                                            '/teacher/' + tech.id + '/detail'
+                                        )
+                                    "
                                 >
                                     <b-list-group>
-                                        <b-list-group-item  v-for="stu in tech.student" :key="stu.id">{{ stu.full_name }}</b-list-group-item>
+                                        <b-list-group-item
+                                            v-for="sb in tech.subject"
+                                            :key="sb.id"
+                                            >{{ sb.name }}</b-list-group-item
+                                        >
                                     </b-list-group>
                                 </td>
-                
+                                <td
+                                    @click.stop="
+                                        $root.changeRoute(
+                                            '/teacher/' + tech.id + '/detail'
+                                        )
+                                    "
+                                    v-if="getLoginInfo.user.role == 'admin'"
+                                >
+                                    <b-list-group>
+                                        <b-list-group-item
+                                            v-for="stu in tech.student"
+                                            :key="stu.id"
+                                            >{{
+                                                stu.full_name
+                                            }}</b-list-group-item
+                                        >
+                                    </b-list-group>
+                                </td>
+                                <td class="align-middle" v-if="getLoginInfo.user.role=='admin'">
+                                    <i
+                                        class="bi bi-pencil hand"
+                                        @click.stop="editTeacher(tech)"
+                                    ></i>
+                                    <i
+                                        class="bi bi-trash hand ml-2"
+                                        @click.stop="deleteTeacher(tech)"
+                                    ></i>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -59,7 +123,7 @@
                             type="button"
                             class="btn btn-back"
                             @click.stop="$router.go(-1)"
-                            v-if="$route.name=='addTeacher'"
+                            v-if="$route.name == 'addTeacher'"
                         >
                             BACK
                         </button>
@@ -217,12 +281,15 @@ import {
     Country,
     State,
 } from "../../Assets/formIcons/index";
-import { loginInfoStore } from '../../stores/loginInfo';
-import {mapState} from 'pinia'
+import { loginInfoStore } from "../../stores/loginInfo";
+import { mapState } from "pinia";
 export default {
     data() {
         return {
-            teachers:[],
+            current_teacher_id: "",
+            current_user_id: "",
+            dispaly_mode: "",
+            teachers: [],
             icons: {
                 First_name: First_name,
                 Last_name: Last_name,
@@ -247,10 +314,31 @@ export default {
         mode: String,
     },
     computed: {
-    ...mapState(loginInfoStore, ['getLoginInfo']),
-  },
+        ...mapState(loginInfoStore, ["getLoginInfo"]),
+    },
     methods: {
-        
+        editTeacher(tec) {
+            this.current_teacher_id = tec.id;
+            this.current_user_id = tec.user_id;
+            this.dispaly_mode = "edit-teacher";
+            this.teacher = {
+                First_name: tec.first_name,
+                Last_name: tec.last_name,
+                Phone: tec.phone,
+                Email: tec.email,
+                Dob: this.dateFormater(tec.dob),
+                Country: tec.country,
+            };
+        },
+        deleteTeacher(teacher) {
+            this.current_teacher_id = teacher.id;
+            this.deleteAlert(this.current_teacher_id, "teacher");
+        },
+        async confirmDeleteTeacher(teacher_id) {
+            let urlText = "teacher/" + teacher_id + "/delete";
+            let deleteResponse = await this.delete(urlText);
+            this.getTeachers();
+        },
         callBack() {
             this.save();
         },
@@ -272,6 +360,19 @@ export default {
                 this.teacher.First_name + " " + this.teacher.Last_name
             );
             formData.append("teacher_info[country]", this.teacher.Country);
+            if (this.dispaly_mode == "edit-teacher") {
+                formData.append("user_extra_info[mode]", "edit");
+                formData.append(
+                    "user_extra_info[current_user_id]",
+                    this.current_user_id
+                );
+                formData.append(
+                    "user_extra_info[current_teacher_id]",
+                    this.current_teacher_id
+                );
+            } else {
+                formData.append("user_extra_info[mode]", "new-record");
+            }
 
             let postResponse = {};
             let urlText = "addTeacher";
@@ -285,26 +386,35 @@ export default {
                 Dob: "",
                 Country: "",
             };
-            this.$router.push({ name: 'teacher' })
+            if (this.dispaly_mode == "edit-teacher") {
+                this.getTeachers();
+            } else {
+                this.$router.push({ name: "teacher" });
+            }
         },
         async getTeachers() {
-            
-            let urlText = '';
-            let getResponse =[];
-            
-            if (this.getLoginInfo.user.role=='student') {
-                urlText = "student/" + this.getLoginInfo.student_info.id + "/teacher";
+            let urlText = "";
+            let getResponse = [];
+
+            if (this.getLoginInfo.user.role == "student") {
+                urlText =
+                    "student/" + this.getLoginInfo.student_info.id + "/teacher";
                 getResponse = await this.get(urlText, 1, false);
-            }else{
+            } else {
                 urlText = "getTeachers";
                 getResponse = await this.get(urlText, 0, false);
             }
-             
+
             this.teachers = getResponse.data.data;
+
+            if (this.dispaly_mode == "edit-teacher") {
+                this.dispaly_mode = "fetch-teachers";
+            }
         },
     },
-    mounted(){
+    mounted() {
+        this.dispaly_mode = this.mode;
         this.getTeachers();
-    }
+    },
 };
 </script>

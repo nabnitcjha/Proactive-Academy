@@ -14,12 +14,10 @@ export default {
         ...mapActions(loginInfoStore, ["setAuthenticate"]),
 
         async post(urlText, formData) {
-            
             let url = "/api/" + urlText;
             let postResponse = await axios
                 .post(url, formData)
                 .then((response) => {
-                    
                     return response;
                 });
 
@@ -52,12 +50,9 @@ export default {
 
             return deleteResponse;
         },
-        logOut(e) {
-            e.preventDefault();
-
+        async logOut() {
             let url = "/api/auth/logout";
-            axios.post(url).then(() => {
-                localStorage.setItem("default_image", "");
+            return axios.post(url).then(() => {
                 this.setAuthenticate(false);
             });
         },

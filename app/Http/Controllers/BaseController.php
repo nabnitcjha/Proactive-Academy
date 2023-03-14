@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\DB;
 class BaseController extends Controller
 {
     //
-
+    protected $Model;
+    
     public function getError($message)
     {
         $this->errorResponse($message);

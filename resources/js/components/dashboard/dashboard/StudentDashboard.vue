@@ -97,45 +97,29 @@
                             <h5 class="card-title">
                                 Assignment <span>| Today</span>
                             </h5>
-
-                            <div class="activity">
-                                <div
-                                    class="activity-item d-flex"
-                                    v-for="(tcls, index) in totalClass"
-                                    :key="index"
-                                >
-                                    <div class="activite-label">
-                                        {{ timeFormater(tcls.start_date) }}
-                                    </div>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-success align-self-start"
-                                        v-if="index == 0"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-danger align-self-start"
-                                        v-if="index == 1"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-primary align-self-start"
-                                        v-if="index == 2"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-info align-self-start"
-                                        v-if="index == 3"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-warning align-self-start"
-                                        v-if="index == 4"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-muted align-self-start"
-                                        v-if="index == 5"
-                                    ></i>
-                                    <div class="activity-content">
-                                        {{ tcls.topic }}
+                            <fragment
+                                v-for="(trs, index) in totalClass"
+                                :key="index"
+                            >
+                                <div class="activity">
+                                    <div
+                                        class="activity-item d-flex"
+                                        v-for="(rf, index) in trs.resource_file"
+                                        :key="index"
+                                        v-if="rf.file_type=='assignment'"
+                                    >
+                                        <i
+                                            v-bind:class="[
+                                                'bi bi-circle-fill activity-badge align-self-start',
+                                                select_badge(),
+                                            ]"
+                                        ></i>
+                                        <div class="activity-content">
+                                            {{ rf.file_info.original_filename }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </fragment>
                         </div>
                     </div>
                 </div>
@@ -176,44 +160,29 @@
                                 Study Resources <span>| Today</span>
                             </h5>
 
-                            <div class="activity">
-                                <div
-                                    class="activity-item d-flex"
-                                    v-for="(tcls, index) in totalClass"
-                                    :key="index"
-                                >
-                                    <div class="activite-label">
-                                        {{ timeFormater(tcls.start_date) }}
-                                    </div>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-success align-self-start"
-                                        v-if="index == 0"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-danger align-self-start"
-                                        v-if="index == 1"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-primary align-self-start"
-                                        v-if="index == 2"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-info align-self-start"
-                                        v-if="index == 3"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-warning align-self-start"
-                                        v-if="index == 4"
-                                    ></i>
-                                    <i
-                                        class="bi bi-circle-fill activity-badge text-muted align-self-start"
-                                        v-if="index == 5"
-                                    ></i>
-                                    <div class="activity-content">
-                                        {{ tcls.topic }}
+                            <fragment
+                                v-for="(trs, index) in totalClass"
+                                :key="index"
+                            >
+                                <div class="activity">
+                                    <div
+                                        class="activity-item d-flex"
+                                        v-for="(rf, index) in trs.resource_file"
+                                        :key="index"
+                                        v-if="rf.file_type=='study_resource'"
+                                    >
+                                        <i
+                                            v-bind:class="[
+                                                'bi bi-circle-fill activity-badge align-self-start',
+                                                select_badge(),
+                                            ]"
+                                        ></i>
+                                        <div class="activity-content">
+                                            {{ rf.file_info.original_filename }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </fragment>
                         </div>
                     </div>
                 </div>
@@ -241,7 +210,7 @@ export default {
     methods: {
         async totalClasses() {
             let urlText =
-                "student/" + this.getLoginInfo.student_info.id + "/sortedClass";
+                "student/" + this.getLoginInfo.student_info.id + "/todayClass";
             let getResponse = await this.get(urlText, 1, false);
             this.totalClass = getResponse.data.data;
         },

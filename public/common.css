@@ -203,7 +203,11 @@ span.custom-checkbox {
   justify-content: flex-start;
 }
 
-
+.return-login{
+  color: #4e4e4e!important;
+  margin-top: 14px!important;
+  letter-spacing: 3px!important;
+}
 
 .highlight-yellow{
   background-color: #FFFF00!important;

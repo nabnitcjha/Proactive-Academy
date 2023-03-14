@@ -153,7 +153,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
               return _this2.get(urlText, id, false);
             case 4:
               getResponse = _context2.sent;
-              _this2.sorted_class = getResponse.data;
+              _this2.sorted_class = getResponse.data.data;
             case 6:
             case "end":
               return _context2.stop();

@@ -29,6 +29,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      current_teacher_id: "",
+      current_user_id: "",
+      dispaly_mode: "",
       teachers: [],
       icons: {
         First_name: _Assets_formIcons_index__WEBPACK_IMPORTED_MODULE_0__.First_name,
@@ -53,8 +56,45 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   props: {
     mode: String
   },
-  computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_2__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ['getLoginInfo'])),
+  computed: _objectSpread({}, (0,pinia__WEBPACK_IMPORTED_MODULE_2__.mapState)(_stores_loginInfo__WEBPACK_IMPORTED_MODULE_1__.loginInfoStore, ["getLoginInfo"])),
   methods: {
+    editTeacher: function editTeacher(tec) {
+      this.current_teacher_id = tec.id;
+      this.current_user_id = tec.user_id;
+      this.dispaly_mode = "edit-teacher";
+      this.teacher = {
+        First_name: tec.first_name,
+        Last_name: tec.last_name,
+        Phone: tec.phone,
+        Email: tec.email,
+        Dob: this.dateFormater(tec.dob),
+        Country: tec.country
+      };
+    },
+    deleteTeacher: function deleteTeacher(teacher) {
+      this.current_teacher_id = teacher.id;
+      this.deleteAlert(this.current_teacher_id, "teacher");
+    },
+    confirmDeleteTeacher: function confirmDeleteTeacher(teacher_id) {
+      var _this = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var urlText, deleteResponse;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              urlText = "teacher/" + teacher_id + "/delete";
+              _context.next = 3;
+              return _this["delete"](urlText);
+            case 3:
+              deleteResponse = _context.sent;
+              _this.getTeachers();
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
     callBack: function callBack() {
       this.save();
     },
@@ -62,29 +102,36 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       this.checkValidation(this.callBack);
     },
     save: function save() {
-      var _this = this;
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var formData, postResponse, urlText;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
             case 0:
               formData = new FormData();
-              formData.append("user_info[first_name]", _this.teacher.First_name);
-              formData.append("user_info[last_name]", _this.teacher.Last_name);
+              formData.append("user_info[first_name]", _this2.teacher.First_name);
+              formData.append("user_info[last_name]", _this2.teacher.Last_name);
               formData.append("user_info[role]", "teacher");
               formData.append("user_info[password]", "1234");
-              formData.append("user_info[email]", _this.teacher.Email);
-              formData.append("teacher_info[phone]", _this.teacher.Phone);
-              formData.append("teacher_info[dob]", _this.teacher.Dob);
-              formData.append("teacher_info[full_name]", _this.teacher.First_name + " " + _this.teacher.Last_name);
-              formData.append("teacher_info[country]", _this.teacher.Country);
+              formData.append("user_info[email]", _this2.teacher.Email);
+              formData.append("teacher_info[phone]", _this2.teacher.Phone);
+              formData.append("teacher_info[dob]", _this2.teacher.Dob);
+              formData.append("teacher_info[full_name]", _this2.teacher.First_name + " " + _this2.teacher.Last_name);
+              formData.append("teacher_info[country]", _this2.teacher.Country);
+              if (_this2.dispaly_mode == "edit-teacher") {
+                formData.append("user_extra_info[mode]", "edit");
+                formData.append("user_extra_info[current_user_id]", _this2.current_user_id);
+                formData.append("user_extra_info[current_teacher_id]", _this2.current_teacher_id);
+              } else {
+                formData.append("user_extra_info[mode]", "new-record");
+              }
               postResponse = {};
               urlText = "addTeacher";
-              _context.next = 14;
-              return _this.post(urlText, formData);
-            case 14:
-              postResponse = _context.sent;
-              _this.teacher = {
+              _context2.next = 15;
+              return _this2.post(urlText, formData);
+            case 15:
+              postResponse = _context2.sent;
+              _this2.teacher = {
                 First_name: "",
                 Last_name: "",
                 Phone: "",
@@ -92,53 +139,61 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
                 Dob: "",
                 Country: ""
               };
-              _this.$router.push({
-                name: 'teacher'
-              });
-            case 17:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }))();
-    },
-    getTeachers: function getTeachers() {
-      var _this2 = this;
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var urlText, getResponse;
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              urlText = '';
-              getResponse = [];
-              if (!(_this2.getLoginInfo.user.role == 'student')) {
-                _context2.next = 9;
-                break;
+              if (_this2.dispaly_mode == "edit-teacher") {
+                _this2.getTeachers();
+              } else {
+                _this2.$router.push({
+                  name: "teacher"
+                });
               }
-              urlText = "student/" + _this2.getLoginInfo.student_info.id + "/teacher";
-              _context2.next = 6;
-              return _this2.get(urlText, 1, false);
-            case 6:
-              getResponse = _context2.sent;
-              _context2.next = 13;
-              break;
-            case 9:
-              urlText = "getTeachers";
-              _context2.next = 12;
-              return _this2.get(urlText, 0, false);
-            case 12:
-              getResponse = _context2.sent;
-            case 13:
-              _this2.teachers = getResponse.data.data;
-            case 14:
+            case 18:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
       }))();
+    },
+    getTeachers: function getTeachers() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var urlText, getResponse;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              urlText = "";
+              getResponse = [];
+              if (!(_this3.getLoginInfo.user.role == "student")) {
+                _context3.next = 9;
+                break;
+              }
+              urlText = "student/" + _this3.getLoginInfo.student_info.id + "/teacher";
+              _context3.next = 6;
+              return _this3.get(urlText, 1, false);
+            case 6:
+              getResponse = _context3.sent;
+              _context3.next = 13;
+              break;
+            case 9:
+              urlText = "getTeachers";
+              _context3.next = 12;
+              return _this3.get(urlText, 0, false);
+            case 12:
+              getResponse = _context3.sent;
+            case 13:
+              _this3.teachers = getResponse.data.data;
+              if (_this3.dispaly_mode == "edit-teacher") {
+                _this3.dispaly_mode = "fetch-teachers";
+              }
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }))();
     }
   },
   mounted: function mounted() {
+    this.dispaly_mode = this.mode;
     this.getTeachers();
   }
 });
@@ -190,7 +245,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-lg-12"
-  }, [_vm.mode == "fetch-teachers" ? _c("div", {
+  }, [_vm.dispaly_mode == "fetch-teachers" ? _c("div", {
     staticClass: "card"
   }, [_c("div", {
     staticClass: "card-body"
@@ -239,7 +294,11 @@ var render = function render() {
     attrs: {
       scope: "col"
     }
-  }, [_vm._v("Student")]) : _vm._e()])]), _vm._v(" "), _c("tbody", _vm._l(_vm.teachers, function (tech, index) {
+  }, [_vm._v("\n                                Student\n                            ")]) : _vm._e(), _vm._v(" "), _vm.getLoginInfo.user.role == "admin" ? _c("th", {
+    attrs: {
+      scope: "col"
+    }
+  }, [_vm._v("Action")]) : _vm._e()])]), _vm._v(" "), _c("tbody", _vm._l(_vm.teachers, function (tech, index) {
     return _c("tr", {
       key: index,
       staticClass: "hand"
@@ -254,21 +313,21 @@ var render = function render() {
           return _vm.$root.changeRoute("/teacher/" + tech.id + "/detail");
         }
       }
-    }, [_vm._v(_vm._s(tech.full_name))]), _vm._v(" "), _c("td", {
+    }, [_vm._v("\n                                " + _vm._s(tech.full_name) + "\n                            ")]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.stopPropagation();
           return _vm.$root.changeRoute("/teacher/" + tech.id + "/detail");
         }
       }
-    }, [_vm._v(_vm._s(tech.email))]), _vm._v(" "), _c("td", {
+    }, [_vm._v("\n                                " + _vm._s(tech.email) + "\n                            ")]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.stopPropagation();
           return _vm.$root.changeRoute("/teacher/" + tech.id + "/detail");
         }
       }
-    }, [_vm._v(_vm._s(tech.phone))]), _vm._v(" "), _c("td", {
+    }, [_vm._v("\n                                " + _vm._s(tech.phone) + "\n                            ")]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.stopPropagation();
@@ -290,7 +349,25 @@ var render = function render() {
       return _c("b-list-group-item", {
         key: stu.id
       }, [_vm._v(_vm._s(stu.full_name))]);
-    }), 1)], 1) : _vm._e()]);
+    }), 1)], 1) : _vm._e(), _vm._v(" "), _vm.getLoginInfo.user.role == "admin" ? _c("td", {
+      staticClass: "align-middle"
+    }, [_c("i", {
+      staticClass: "bi bi-pencil hand",
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.editTeacher(tech);
+        }
+      }
+    }), _vm._v(" "), _c("i", {
+      staticClass: "bi bi-trash hand ml-2",
+      on: {
+        click: function click($event) {
+          $event.stopPropagation();
+          return _vm.deleteTeacher(tech);
+        }
+      }
+    })]) : _vm._e()]);
   }), 0)])])]) : _c("div", {
     staticClass: "card"
   }, [_c("div", {

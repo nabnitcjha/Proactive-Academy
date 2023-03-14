@@ -17,7 +17,7 @@
                 <span>Student</span>
             </a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a
                 class="nav-link collapsed hand"
                 @click.stop="$root.changeRoute('/payment')"
@@ -25,7 +25,7 @@
                 <i class="bi bi-send"></i>
                 <span>Payment</span>
             </a>
-        </li>
+        </li> -->
         <!-- End Student Nav -->
     </ul>
 </template>

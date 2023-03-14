@@ -25,6 +25,7 @@
                                 <th scope="col">Subject</th>
                                 <th scope="col">Teacher</th>
                                 <th scope="col">Student</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,6 +39,12 @@
                                     <b-list-group>
                                         <b-list-group-item  v-for="stu in sort_cls.students" :key="stu.id">{{ stu.full_name }}</b-list-group-item>
                                     </b-list-group>
+                                </td>
+                                <td class="align-middle">
+                                    <i
+                                        class="bi bi-trash hand ml-2"
+                                        @click.stop="deleteClassSchedule(sort_cls)"
+                                    ></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -246,6 +253,7 @@ import moment from "moment";
 export default {
     data() {
         return {
+            current_unique_id:'',
             sorted_class:[],
             currentTimetableId: "",
             studentCalendarDetail: false,
@@ -290,6 +298,15 @@ export default {
         mode: String,
     },
     methods: {
+        deleteClassSchedule(sort_cls) {
+            this.current_unique_id = sort_cls.class_unique_id;
+            this.deleteAlert(this.current_unique_id,'class-schedule');
+        },
+        async confirmDeleteClassSchedul(unique_id){
+            let urlText = 'timetable/'+unique_id+'/delete';
+            let deleteResponse = await this.delete(urlText);
+            this.initialCall();
+        },
         disabledBeforeToday(date) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);

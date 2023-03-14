@@ -17,8 +17,13 @@ class StudentListResource extends JsonResource
         return [
             "id" => $this->id,
             "full_name" => $this->full_name,
+            "first_name" => $this->user->first_name,
+            "last_name" => $this->user->last_name,
             "phone" => $this->phone,
+            "user_id" => $this->user_id,
             "email" => $this->user->email,
+            "dob" => $this->dob,
+            "country" => $this->country,
             'teacher' => TeacherResource::collection($this->teacher),
             'subject' => SubjectResource::collection($this->subject),
             'guardian' => GuardianResource::collection($this->guardian),

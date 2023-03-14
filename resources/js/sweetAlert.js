@@ -24,7 +24,16 @@ export default {
                         if (type == "calendar") {
                             this.$root.deleteFile(id);
                             this.getResourceFile();
+                        }else if (type == "student") {
+                            this.confirmDeleteStudent(id);
+                        }else if (type == "teacher") {
+                            this.confirmDeleteTeacher(id);
+                        }else if (type == "subject") {
+                            this.confirmDeleteSubject(id);
+                        }else if (type == "class-schedule") {
+                            this.confirmDeleteClassSchedul(id);
                         }
+
                         this.$swal.fire(
                             "Deleted!",
                             "Your file has been deleted.",

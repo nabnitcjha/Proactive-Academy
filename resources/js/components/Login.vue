@@ -43,8 +43,7 @@ export default {
     methods: {
         ...mapActions(loginInfoStore, ['setLoginInfo','setAuthenticate']),
         forgetPassword() {
-            this.show('hello show toaster');
-            // this.$router.push('/forget-password');
+            this.$root.changeRoute('/forgot-password');
         },
 
        async userlogin(e) {

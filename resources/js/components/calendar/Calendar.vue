@@ -230,7 +230,7 @@
                                                     :key="index"
                                                     v-if="
                                                         rsf &&
-                                                        rsf.resourceFile != null
+                                                        rsf.resourceFile != null  && rsf.type=='study_resource'
                                                     "
                                                     style="padding-bottom: 2rem"
                                                 >
@@ -342,7 +342,7 @@
                                                         :key="index"
                                                         v-if="
                                                             rsf.resourceFile !=
-                                                            null
+                                                            null && rsf.type=='assignment'
                                                         "
                                                     >
                                                         <td class="td-rs-file">
@@ -533,31 +533,36 @@
                                                 class="list-group list-group-flush"
                                                 v-else
                                             >
-                                                <div
-                                                    class="form-group col-sm-12 col-lg-12 d-flex"
-                                                >
-                                                    <div class="zoom-link">
-                                                        <input
-                                                            v-model="zoom_link"
-                                                            type="text"
-                                                            class="form-control remove-border"
-                                                            id="zoom_link"
-                                                            placeholder="add link"
-                                                        />
-                                                        <i
-                                                            class="bi bi-clipboard"
-                                                            @click.stop="
-                                                                copyzoom_link
-                                                            "
-                                                        ></i>
-                                                    </div>
-                                                    <button
-                                                        class="btn btn-warning btn-session pointer-hand col-3 mt-2 mx-auto go-to-link cstm-btn"
-                                                        @click.stop="openLink"
-                                                    >
-                                                        Go
-                                                    </button>
-                                                </div>
+                                            <div
+                                    class="form-group col-sm-12 col-lg-12 d-flex justify-content-between"
+                                >
+                                    <label
+                                        for="file"
+                                        class="input input-file zoom-link d-flex"
+                                        style="width: inherit"
+                                    >
+                                        <input
+                                            v-model="zoom_link"
+                                            type="text"
+                                            id="zoom_link"
+                                            class="form-control form-control-sm remove-border"
+                                            placeholder="add zoom link"
+                                            readonly
+                                        />
+                                        <i
+                                            class="bi bi-clipboard"
+                                            @click.stop="copyzoom_link"
+                                        ></i>
+                                    </label>
+                                    <button
+                                        type="button"
+                                        class="btn btn-success cstm-btn"
+                                        @click.stop="openLink"
+                                    >
+                                        Go
+                                    </button>
+                                   
+                                </div>
                                             </ul>
                                         </div>
                                         <div class="card">

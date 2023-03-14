@@ -89,9 +89,11 @@ export default {
     methods: {
         async totalClasses() {
             let urlText =
-                "teacher/" + this.getLoginInfo.teacher_info.id + "/sortedClass";
+                "teacher/" + this.getLoginInfo.teacher_info.id + "/todayClass";
             let getResponse = await this.get(urlText, 1, false);
+            
             this.totalClass = getResponse.data.data;
+            
         },
     },
 };
